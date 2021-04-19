@@ -1,3 +1,4 @@
+from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -11,7 +12,21 @@ HYP_WILD_TYPE = "hypothetical wild type"
 # TODO: Add checks for incorrect parameter sets
 
 
-def darwinian_lottery(cohort, hazard_rate_parameters):
+def darwinian_lottery(cohort: np.ndarray, hazard_rate_parameters: dict) -> np.ndarray:
+    """[summary]
+
+    Parameters
+    ----------
+    cohort : np.ndarray
+        [description]
+    hazard_rate_parameters : dict
+        [description]
+
+    Returns
+    -------
+    np.ndarray
+        [description]
+    """
     number_of_individuals = cohort.shape[0]
     hazard = get_hazard_rate(**hazard_rate_parameters)
     lottery_tickets = cohort * np.random.random_sample(number_of_individuals)
@@ -21,8 +36,23 @@ def darwinian_lottery(cohort, hazard_rate_parameters):
     return survivors
 
 
-def cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters, t_m):
+def cohort_survivorship_model(cohort_survivorship: np.ndarray, hazard_rate_parameters: dict, t_m: int) -> np.ndarray:
+    """[summary]
 
+    Parameters
+    ----------
+    cohort_survivorship : np.ndarray
+        [description]
+    hazard_rate_parameters : dict
+        [description]
+    t_m : int
+        [description]
+
+    Returns
+    -------
+    np.ndarray
+        [description]
+    """
     # On first run, make 1D array into 2D
     if len(cohort_survivorship.shape) == 1:
         cohort_survivorship = cohort_survivorship.reshape(1, -1)
@@ -41,7 +71,34 @@ def cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters, t_m):
     return cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters, t_m)
 
 
-def get_hazard_rate(population, epsilon, hazard_rate_wild_type, alpha, kappa, t):
+def get_hazard_rate(population: str, epsilon: float, hazard_rate_wild_type: float, alpha: float, kappa: float, t: int) -> float:
+    """[summary]
+
+    Parameters
+    ----------
+    population : str
+        [description]
+    epsilon : float
+        [description]
+    hazard_rate_wild_type : float
+        [description]
+    alpha : float
+        [description]
+    kappa : float
+        [description]
+    t : int
+        [description]
+
+    Returns
+    -------
+    float
+        [description]
+
+    Raises
+    ------
+    ValueError
+        [description]
+    """
     if population == "mutant wild":
         return (1 - epsilon) * hazard_rate_wild_type + alpha * (
             ((1 + kappa) ** (t + 1)) - 1
@@ -57,8 +114,28 @@ def get_hazard_rate(population, epsilon, hazard_rate_wild_type, alpha, kappa, t)
 
 
 def run_simulation(
-    number_of_repetitions, cohort_survivorship, hazard_rate_parameters, t_m, population
-):
+    number_of_repetitions: int, cohort_survivorship: np.ndarray, hazard_rate_parameters: dict, t_m: int, population: str
+) -> np.ndarray:
+    """[summary]
+
+    Parameters
+    ----------
+    number_of_repetitions : int
+        [description]
+    cohort_survivorship : np.ndarray
+        [description]
+    hazard_rate_parameters : dict
+        [description]
+    t_m : int
+        [description]
+    population : str
+        [description]
+
+    Returns
+    -------
+    np.ndarray
+        [description]
+    """
     hazard_rate_parameters["population"] = population
 
     population_survivorship = []
@@ -73,25 +150,50 @@ def run_simulation(
     return np.array(population_survivorship)
 
 
-def get_mean_and_std(population_survivorship):
+def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[float, float]:
+    """[summary] # Normalized # Assumes simulation always starts with all individuals alive
 
-    # Normalized
-    number_of_individuals = population_survivorship[
-        0, 0
-    ]  # Assumes simulation always starts with all individuals alive
+    Parameters
+    ----------
+    population_survivorship : np.ndarray
+        [description]
+
+    Returns
+    -------
+    Tuple[float, float]
+        [description]
+    """
+    number_of_individuals = population_survivorship[0, 0]
     mean = np.mean(population_survivorship, axis=0) * (1 / number_of_individuals)
     std = np.std(population_survivorship * (1 / number_of_individuals), axis=0)
     return mean, std
 
 
 def plot_fig_1(
-    t_m_captivity,
-    t_m_wild,
-    t_m_hyp_wt,
-    captivity_population,
-    wild_population,
-    hyp_wt_population,
+    t_m_captivity: int,
+    t_m_wild: int,
+    t_m_hyp_wt:int,
+    captivity_population: np.ndarray,
+    wild_population: np.ndarray,
+    hyp_wt_population: np.ndarray,
 ):
+    """[summary]
+
+    Parameters
+    ----------
+    t_m_captivity : int
+        [description]
+    t_m_wild : int
+        [description]
+    t_m_hyp_wt : int
+        [description]
+    captivity_population : np.ndarray
+        [description]
+    wild_population : np.ndarray
+        [description]
+    hyp_wt_population : np.ndarray
+        [description]
+    """
     # TODO: Én eller to variabler for de to t_m som skal være like?
 
     fig, ax = plt.subplots(figsize=(6, 6))
