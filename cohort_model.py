@@ -7,6 +7,9 @@ HYP_WILD_TYPE = "hypothetical wild type"
 
 # TODO: https://stackoverflow.com/questions/48721582/how-to-choose-proper-variable-names-for-long-names-in-python
 
+#rng = np.random.default_rng() # Random number generator
+# lottery_tickets = cohort * rng.random(number_of_individuals)
+
 def darwinian_lottery(cohort, hazard_rate_parameters):
     number_of_individuals = cohort.shape[0] 
     hazard = hazard_rate(**hazard_rate_parameters)
@@ -15,8 +18,8 @@ def darwinian_lottery(cohort, hazard_rate_parameters):
     return survivors
     
 
-def cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters):
-    
+def cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters, t_m):
+
     # On first run, make 1D array into 2D
     if len(cohort_survivorship.shape) == 1:
         cohort_survivorship = cohort_survivorship.reshape(1, -1)
@@ -27,11 +30,13 @@ def cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters):
     current_cohort = cohort_survivorship[-1]
     number_of_survivors = sum(current_cohort)
     
-    if number_of_survivors <= 1: 
+    # TODO: hvilken sammenligning av > og >= stemmer?
+    if time >= t_m:
+    #if number_of_survivors <= 1: 
         return cohort_survivorship
     survivors = darwinian_lottery(current_cohort, hazard_rate_parameters)
     cohort_survivorship = np.append(cohort_survivorship, survivors.reshape(1, -1), axis=0)        
-    return cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters)
+    return cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters, t_m)
 
 def hazard_rate(population, epsilon, hazard_rate_wild_type, alpha, kappa, time):    
     # TODO: Rename funksjon til get_hazard_rate
@@ -52,14 +57,16 @@ def run_simulation(number_of_repetitions, cohort_survivorship, hazard_rate_param
 
     results = []
     for _ in range(number_of_repetitions):
-        n_survivors_per_timestep = np.sum(cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters), axis=1, dtype=int)
+        n_survivors_per_timestep = np.sum(cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters, t_max), axis=1, dtype=int)
         results.append(n_survivors_per_timestep)
     
+    # TODO: Bruker t_m og går ikke til null lengre, derfor ikke nødvendig med denne sjekken
     for repetition in results:
         if len(repetition) < t_max:
             raise Exception("Hva gjør vi når dette skjer?") # TODO
     
-    return np.array([repetition[:t_max] for repetition in results])
+    return np.array(results)
+    #return np.array([repetition[:t_max] for repetition in results])
 
 
 def get_mean_and_std(survivors_per_timestep):
