@@ -3,6 +3,8 @@ import numpy as np
 from typing import Tuple
 from scipy.optimize import brentq
 
+from cohort_model import HYP_WILD_TYPE, MUTANT_WILD
+
 def get_fecundity(population_survivorship, fertility):
     # fertility: tuple (time of deposition, Number of female offspring in clutch)
     # population_survivorship er én av variantene for population_simulations[HYP_WILD_TYPE], altså dim (1000, 100)
@@ -67,3 +69,18 @@ def get_fitness_data(population_simulation, number_of_repetitions, t_m, fertilit
         sem_r_arr.append(sem_r)
 
     return dict(mean_r0=mean_r0_arr, sem_r0=sem_r0_arr, mean_r=mean_r_arr, sem_r=sem_r_arr)
+
+def homarus_fertility(t_m, sigma, gamma, frequency, population, mu=None, alpha=None, kappa=None):
+    t_arr = np.arange(0, t_m)
+    fertility = sigma * (1 + gamma * t_arr / t_m)
+    for t in t_arr:
+        if t % frequency != frequency - 1: # First birth term starts at t = frequency - 1 (i.e. not t = 0)
+            fertility[t] = 0.
+    
+    if population == HYP_WILD_TYPE:
+        return fertility
+    
+    if population == MUTANT_WILD:
+        for t in t_arr:
+            fertility[t] = fertility[t] * (1 - mu * alpha * ((1 + kappa) ** (t + 1) - 1))
+        return fertility
