@@ -49,10 +49,13 @@ def plot_fig_1(t_m_captivity, t_m_wild, t_m_hyp_wt, mean_captivity, std_captivit
 
     fig.tight_layout()
 
+ 
     figure = plt.gcf()
     figure.set_size_inches(3.42, 3.42)
 
-    plt.savefig(f"PNAS_fig1_Frontinella.pdf", dpi=1200, bbox_inches="tight")
+
+    figure.savefig(f"PNAS_fig1_Frontinella.pdf", dpi=1200, bbox_inches="tight")
+
 
 def plot_fig_2(t_m, mean_diff, std_diff, number_of_repetitions):
     C = np.arange(0, t_m, 1, dtype=int)
@@ -142,5 +145,46 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
 def plot_fig_4():
     pass
 
-def plot_fig_5():
-    pass
+def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
+    mean_r0_wt = fitness_stats_wt["mean_r0"]
+    sem_r0_wt = fitness_stats_wt["sem_r0"]
+    mean_r_wt = fitness_stats_wt["mean_r"]
+    sem_r_wt = fitness_stats_wt["sem_r"]
+
+    mean_r0_mut = fitness_stats_mut["mean_r0"]
+    sem_r0_mut = fitness_stats_mut["sem_r0"]
+    mean_r_mut = fitness_stats_mut["mean_r"]
+    sem_r_mut = fitness_stats_mut["sem_r"]
+        
+    y1_pos = [0]
+    y2_pos = [1,2,3,4]
+    y3_pos = [5]
+    y4_pos = [6,7,8,9]
+    y5_pos = [4]
+
+    fig,ax1 = plt.subplots(figsize=(6,6))
+    afont = {'fontname': 'Arial'}
+
+    ax1.bar(y1_pos, mean_r0_wt[0], yerr=sem_r0_wt[0], align='center', alpha=0.4, ecolor='black', capsize=3, color='C0')
+    ax1.bar(y2_pos, mean_r0_mut, yerr=sem_r0_mut, align='center', alpha=0.8, ecolor='black', capsize=3, color='C0')
+
+    ax1.set_ylabel('R0', fontsize=14, **afont)
+    ax1.set_ylim(0.96 * mean_r0_wt[0], 1.035 * mean_r0_wt[0])
+
+    ax2 = ax1.twinx()
+
+    ax2.bar(y3_pos, mean_r_wt[0], yerr=sem_r_wt[0], align='center', alpha=0.4, ecolor='black', capsize=3, color='C3')
+    ax2.bar(y4_pos, mean_r_mut, yerr=sem_r_mut, align='center', alpha=0.8, ecolor='black', capsize=3, color='C3')
+
+    ax2.set_ylabel('r', fontsize=16, **afont)
+    ax2.set_ylim(0.98 * mean_r_wt[0], 1.019 * mean_r_wt[0])
+
+    ax2.set_xticks(y5_pos)
+    xticks = [' wt($\epsilon$) vs mut($\epsilon$)']
+    ax1.set_xticklabels(xticks, fontsize=13)
+
+    fig.tight_layout()
+
+    figure = plt.gcf()
+    figure.set_size_inches(3.42, 3.42)
+    plt.savefig('PNAS_fig5_Homarus.pdf', dpi=1200, bbox_inches="tight")

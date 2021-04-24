@@ -22,7 +22,10 @@ def get_hazard_rate(
     alpha: float,
     kappa: float,
     t: int,
+    t_m: int = 100,
+    beta: float = 0,
 ) -> float:
+    # OBS! beta = 0 by default and  t_m = 100, bare så vi ikke trenger å stille inn det i tidligere kode
     """[summary]
 
     Parameters
@@ -50,14 +53,14 @@ def get_hazard_rate(
     ValueError
         [description]
     """
-    if population == "mutant wild":
-        return (1 - epsilon) * hazard_rate_wild_type + alpha * (
+    if population == MUTANT_WILD:
+        return (1 - epsilon) * hazard_rate_wild_type * (1 - beta * t / t_m) + alpha * (
             ((1 + kappa) ** (t + 1)) - 1
         )
-    if population == "mutant captivity":
+    if population == MUTANT_CAP:
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
-    if population == "hypothetical wild type":
-        return hazard_rate_wild_type
+    if population == HYP_WILD_TYPE:
+        return hazard_rate_wild_type * (1 - beta * t / t_m)
 
     raise ValueError(
         "Population argument must be set to either 'mutant wild', 'mutant captivity' or 'hypothetical wild type'."
@@ -130,7 +133,7 @@ def run_simulation(
     cohort: np.ndarray,
     hazard_rate_parameters: dict,
     t_m: int,
-    population: str,
+    population: str
 ) -> np.ndarray:
     """[summary]
 
@@ -175,7 +178,9 @@ def get_cohort_model_data(
     kappa: float,
     epsilon: float,
     hazard_rate_wild_type: float,
-    number_of_repetitions: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    number_of_repetitions: int,
+    beta: float = 0
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """[summary]
 
     Parameters
@@ -207,7 +212,7 @@ def get_cohort_model_data(
 
     cohort = np.ones(number_of_individuals)
 
-    hazard_rate_parameters = dict(epsilon=epsilon, hazard_rate_wild_type=hazard_rate_wild_type, alpha=alpha, kappa=kappa)
+    hazard_rate_parameters = dict(epsilon=epsilon, hazard_rate_wild_type=hazard_rate_wild_type, alpha=alpha, kappa=kappa, beta=beta)
 
     captivity_population = run_simulation(number_of_repetitions, cohort, hazard_rate_parameters, t_m_captivity, MUTANT_CAP)
     wild_population = run_simulation(number_of_repetitions, cohort, hazard_rate_parameters, t_m_wild, MUTANT_WILD)
@@ -235,7 +240,7 @@ def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[float, float]
     return mean, std
 
 
-def population_survivorship_difference(number_of_individuals, number_of_repetitions, epsilons, hazard_rates_wt, alpha, kappa, t_m, populations=(MUTANT_WILD, HYP_WILD_TYPE)):
+def population_survivorship_difference(number_of_individuals, number_of_repetitions, epsilons, hazard_rates_wt, alpha, kappa, t_m, populations=(MUTANT_WILD, HYP_WILD_TYPE), beta=0):
     # #Calculates the difference in number of survivors between hypothetical wild type and mutant across the given time span 
     cohort = np.ones(number_of_individuals)
 
@@ -244,7 +249,7 @@ def population_survivorship_difference(number_of_individuals, number_of_repetiti
     for population in populations:
         np.random.seed(1729) # Reset seed to produce the same pseudo-random number sequence for each population
         for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
-            hazard_rate_parameters = dict(epsilon=epsilon, hazard_rate_wild_type=hazard_rate_wt, alpha=alpha, kappa=kappa)
+            hazard_rate_parameters = dict(epsilon=epsilon, hazard_rate_wild_type=hazard_rate_wt, alpha=alpha, kappa=kappa, beta=beta)
             cohort_simulation = run_simulation(number_of_repetitions, cohort, hazard_rate_parameters, t_m, population)
             population_simulations[population].append(cohort_simulation)
     
