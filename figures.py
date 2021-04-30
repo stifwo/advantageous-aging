@@ -142,8 +142,60 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
     figure.set_size_inches(3.42, 3.42)
     plt.savefig('PNAS_fig3_Frontinella.pdf', dpi=1200, bbox_inches="tight")
 
-def plot_fig_4():
-    pass
+def plot_fig_4(t_m_cap_f, t_m_cap_m, t_m_wild_f, t_m_wild_m, mean_cap_f, mean_cap_m, mean_wild_f, mean_wild_m):
+    fig, ax = plt.subplots(figsize=(6, 6))
+
+    # Plotting captive females
+    # Females captivity: extraction from Kawasaki et al 18.12.20
+    X_C_F = [0,325*(37/148),325*(52/148),325*(73.5/148),325*(91/148),325*(109/148),325*(120/148),325*(148/148)]
+    Y_C_F = [1.0,0.9,0.8,0.6,0.4,0.2,0.1,0.0]
+    ax.plot(X_C_F,Y_C_F,'ro', markersize=4)
+
+    C1 = np.arange(0, t_m_cap_f)
+    ax.plot(C1, mean_cap_f, 'r-')
+
+    # Plotting captive males
+    # Males captivity: extraction from Kawasaki et al 18.12.20
+    X_C_M = [0,290*(49/131.5),290*(61/131.5),290*(78/131.5),290*(91/131.5),290*(104/131.5),290*(112/131.5),290*(131.5/131.5)]
+    Y_C_M = [1.0,0.9,0.8,0.6,0.4,0.2,0.1,0.0]
+    ax.plot(X_C_M,Y_C_M,'bo', markersize=4)
+
+    C2 = np.arange(0, t_m_cap_m)
+    ax.plot(C2, mean_cap_m, 'b-')
+
+    # Plotting wild females
+    # Females wild: extraction from Kawasaki et al per 20 Dec 2020
+    X_W_F = [0,100*2/45,100*4/45,100*8/45,100*14/45,100*45/45]
+    Y_W_F = [1.0,0.8,0.6,0.4,0.2,0.0]
+    ax.plot(X_W_F,Y_W_F,'ro', markersize=4)
+
+    C3 = np.arange(0, t_m_wild_f)
+    ax.plot(C3, mean_wild_f, 'r-')
+
+    # Plotting wild males
+    # Males wild: extraction from Kawasaki et al per 20 Dec 2020                  
+    X_W_M = [0,53*2.5/24,53*5/24,53*8.5/24,53*12/24,53*24/24]
+    Y_W_M = [1.0,0.8,0.6,0.4,0.2,0.0]
+    ax.plot(X_W_M,Y_W_M,'bo', markersize=4)
+                                                    
+    C4 = np.arange(0, t_m_wild_m)
+    ax.plot(C4, mean_wild_m, 'b-')
+
+    afont = {'fontname': 'Arial'}
+    ax.set_xlabel("Time", fontsize=12, **afont)
+    ax.set_ylabel("Cohort survivorship", fontsize=12, **afont)
+
+    x_size = 10
+    plt.rc('xtick', labelsize=x_size)
+    y_size = 10
+    plt.rc('ytick', labelsize=y_size)
+
+    fig.tight_layout()
+
+    figure = plt.gcf()
+    figure.set_size_inches(3.42, 3.42)
+
+    plt.savefig('PNAS_fig4_Telostylinus.pdf', dpi=1200, bbox_inches="tight")
 
 def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     mean_r0_wt = fitness_stats_wt["mean_r0"]
