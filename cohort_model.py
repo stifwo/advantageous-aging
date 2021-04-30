@@ -17,15 +17,18 @@ HYP_WILD_TYPE = "hypothetical wild type"
 
 def get_hazard_rate(
     population: str,
-    epsilon: float,
-    hazard_rate_wild_type: float,
     alpha: float,
     kappa: float,
     t: int,
     t_m: int = 100,
+    epsilon: float = None,
+    hazard_rate_wild_type: float = None,
     beta: float = 0,
+    omega: float = 0,
+    tau: float = 0,
 ) -> float:
     # OBS! beta = 0 by default and  t_m = 100, bare så vi ikke trenger å stille inn det i tidligere kode
+    # Ditto for omega og tau
     """[summary]
 
     Parameters
@@ -56,7 +59,7 @@ def get_hazard_rate(
     if population == MUTANT_WILD:
         return (1 - epsilon) * hazard_rate_wild_type * (1 - beta * t / t_m) + alpha * (
             ((1 + kappa) ** (t + 1)) - 1
-        )
+        ) + (omega * t ** tau)
     if population == MUTANT_CAP:
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
     if population == HYP_WILD_TYPE:
