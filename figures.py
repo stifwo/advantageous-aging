@@ -54,7 +54,7 @@ def plot_fig_1(t_m_captivity, t_m_wild, t_m_hyp_wt, mean_captivity, std_captivit
     figure.set_size_inches(3.42, 3.42)
 
 
-    figure.savefig(f"PNAS_fig1_Frontinella.pdf", dpi=1200, bbox_inches="tight")
+    figure.savefig(f"figures/PNAS_fig1_Frontinella.pdf", dpi=1200, bbox_inches="tight")
 
 
 def plot_fig_2(t_m, mean_diff, std_diff, number_of_repetitions):
@@ -86,7 +86,7 @@ def plot_fig_2(t_m, mean_diff, std_diff, number_of_repetitions):
 
     figure = plt.gcf()
     figure.set_size_inches(3.42, 3.42)
-    plt.savefig('PNAS_fig2_Frontinella.pdf', dpi=1200, bbox_inches="tight")
+    plt.savefig('figures/PNAS_fig2_Frontinella.pdf', dpi=1200, bbox_inches="tight")
 
 
 def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
@@ -140,7 +140,7 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
 
     figure = plt.gcf()
     figure.set_size_inches(3.42, 3.42)
-    plt.savefig('PNAS_fig3_Frontinella.pdf', dpi=1200, bbox_inches="tight")
+    plt.savefig('figures/PNAS_fig3_Frontinella.pdf', dpi=1200, bbox_inches="tight")
 
 def plot_fig_4(t_m_cap_f, t_m_cap_m, t_m_wild_f, t_m_wild_m, mean_cap_f, mean_cap_m, mean_wild_f, mean_wild_m):
     fig, ax = plt.subplots(figsize=(6, 6))
@@ -195,7 +195,7 @@ def plot_fig_4(t_m_cap_f, t_m_cap_m, t_m_wild_f, t_m_wild_m, mean_cap_f, mean_ca
     figure = plt.gcf()
     figure.set_size_inches(3.42, 3.42)
 
-    plt.savefig('PNAS_fig4_Telostylinus.pdf', dpi=1200, bbox_inches="tight")
+    plt.savefig('figures/PNAS_fig4_Telostylinus.pdf', dpi=1200, bbox_inches="tight")
 
 def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     mean_r0_wt = fitness_stats_wt["mean_r0"]
@@ -239,4 +239,4 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
 
     figure = plt.gcf()
     figure.set_size_inches(3.42, 3.42)
-    plt.savefig('PNAS_fig5_Homarus.pdf', dpi=1200, bbox_inches="tight")
+    plt.savefig('figures/PNAS_fig5_Homarus.pdf', dpi=1200, bbox_inches="tight")
