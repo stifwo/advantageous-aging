@@ -61,9 +61,11 @@ def get_hazard_rate(
             ((1 + kappa) ** (t + 1)) - 1
         ) + (omega * t ** tau)
     if population == MUTANT_CAP:
+        # TODO: Skal denne ha et omega * t ** tau type ledd også? Nei tror ikke det.
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
     if population == HYP_WILD_TYPE:
-        return hazard_rate_wild_type * (1 - beta * t / t_m)
+        # TODO: OBS VIKTIG Skal denne ha et omega * t ** tau type ledd også? Den har det i opprinnelig kode
+        return hazard_rate_wild_type * (1 - beta * t / t_m) + (omega * t ** tau)
 
     raise ValueError(
         "Population argument must be set to either 'mutant wild', 'mutant captivity' or 'hypothetical wild type'."
@@ -243,7 +245,8 @@ def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[float, float]
     return mean, std
 
 
-def population_survivorship_difference(number_of_individuals, number_of_repetitions, epsilons, hazard_rates_wt, alpha, kappa, t_m, populations=(MUTANT_WILD, HYP_WILD_TYPE), beta=0):
+def population_survivorship_difference(number_of_individuals, number_of_repetitions, epsilons, hazard_rates_wt, alpha, kappa, t_m, populations=(MUTANT_WILD, HYP_WILD_TYPE), beta=0, omega=0, tau=0):
+    # TODO: Refactor to take in a hazard rate parameter dictionary instead of all these individual parameters
     # #Calculates the difference in number of survivors between hypothetical wild type and mutant across the given time span 
     cohort = np.ones(number_of_individuals)
 
@@ -252,7 +255,7 @@ def population_survivorship_difference(number_of_individuals, number_of_repetiti
     for population in populations:
         np.random.seed(1729) # Reset seed to produce the same pseudo-random number sequence for each population
         for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
-            hazard_rate_parameters = dict(epsilon=epsilon, hazard_rate_wild_type=hazard_rate_wt, alpha=alpha, kappa=kappa, beta=beta)
+            hazard_rate_parameters = dict(epsilon=epsilon, hazard_rate_wild_type=hazard_rate_wt, alpha=alpha, kappa=kappa, beta=beta, omega=omega, tau=tau)
             cohort_simulation = run_simulation(number_of_repetitions, cohort, hazard_rate_parameters, t_m, population)
             population_simulations[population].append(cohort_simulation)
     
