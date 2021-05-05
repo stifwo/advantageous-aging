@@ -214,7 +214,7 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     y4_pos = [6,7,8,9]
     y5_pos = [4]
 
-    fig,ax1 = plt.subplots(figsize=(6,6))
+    fig,ax1 = plt.subplots(figsize=(6, 6))
     afont = {'fontname': 'Arial'}
 
     ax1.bar(y1_pos, mean_r0_wt[0], yerr=sem_r0_wt[0], align='center', alpha=0.4, ecolor='black', capsize=3, color='C0')
@@ -232,7 +232,7 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     ax2.set_ylim(0.98 * mean_r_wt[0], 1.019 * mean_r_wt[0])
 
     ax2.set_xticks(y5_pos)
-    xticks = [' wt($\epsilon$) vs mut($\epsilon$)']
+    xticks = ['wt($\epsilon$) vs mut($\epsilon$)']
     ax1.set_xticklabels(xticks, fontsize=13)
 
     fig.tight_layout()
