@@ -75,7 +75,7 @@ def get_mean_and_sem(arr: np.ndarray) -> Tuple[float, float]:
     """Return mean and standard error of the mean of an array.
 
     The mean and sem are not normalized.
-    
+
     Parameters
     ----------
     arr : np.ndarray
@@ -93,15 +93,17 @@ def get_mean_and_sem(arr: np.ndarray) -> Tuple[float, float]:
     return mean, sem
 
 
-def get_fitness_data(population_simulation: np.ndarray, fertility: "list[Tuple[int, float]]") -> dict:
+def get_fitness_data(
+    population_simulation: np.ndarray, fertility: "list[Tuple[int, float]]"
+) -> dict:
     """Get R0 and r data for a population for each epsilon–hazard rate wt pair.
 
     Parameters
     ----------
     population_simulation : np.ndarray
-        A 3D array of shape (number of epsilon–hazard rate wt pairs, 
+        A 3D array of shape (number of epsilon–hazard rate wt pairs,
         repetition_count, t_m), representing population survivorship data for
-        each of the epsilon–hazard rate wt pairs 
+        each of the epsilon–hazard rate wt pairs
     fertility : list[Tuple[int, float]]
         A list of tuples each indicating the time of a reproductive event and
         number of female offspring in this reproductive event
@@ -109,7 +111,7 @@ def get_fitness_data(population_simulation: np.ndarray, fertility: "list[Tuple[i
     Returns
     -------
     dict
-        A dictionary with mean R0, SEM R0, mean r and SEM r values for each 
+        A dictionary with mean R0, SEM R0, mean r and SEM r values for each
         epsilon–hazard rate wt pair
     """
     repetition_count = population_simulation.shape[1]
@@ -125,7 +127,7 @@ def get_fitness_data(population_simulation: np.ndarray, fertility: "list[Tuple[i
     value_count = len(population_simulation)
     for value_index in range(value_count):
         fecundity = get_fecundity(population_simulation[value_index], fertility)
-        r0 = np.sum(fecundity, axis=1) # R0: net reproductive rate
+        r0 = np.sum(fecundity, axis=1)  # R0: net reproductive rate
 
         a, b = -2, 8  # Bracketing interval for Brent's method (may need adjustments)
 
@@ -133,7 +135,7 @@ def get_fitness_data(population_simulation: np.ndarray, fertility: "list[Tuple[i
         for row in range(repetition_count):
             f = fecundity[row, :]
             # r: intrinsic rate of natural increase
-            r = brentq(euler_lotka, a, b, args=(f, t_arr)) 
+            r = brentq(euler_lotka, a, b, args=(f, t_arr))
             r_arr.append(r)
 
         mean_r0, sem_r0 = get_mean_and_sem(r0)
@@ -150,41 +152,49 @@ def get_fitness_data(population_simulation: np.ndarray, fertility: "list[Tuple[i
 
 
 def homarus_fertility(
-    t_m: int, sigma: float, gamma: float, frequency: int, population: str, mu: float = None, alpha: float = None, kappa: float = None
+    t_m: int,
+    sigma: float,
+    gamma: float,
+    frequency: int,
+    population: str,
+    mu: float = None,
+    alpha: float = None,
+    kappa: float = None,
 ) -> np.ndarray:
-    """[summary]
+    # TODO: Summary correct with respect to female offspring?
+    """Get the average number of female offspring at age t based on model of Homarus gammarus fertility.
+
+    Explanations for parameters are given in Omholt and Kirkwood (2021).
 
     Parameters
     ----------
     t_m : int
-        [description]
+        The maximum time step
     sigma : float
-        [description]
+        The sigma value
     gamma : float
-        [description]
+        The gamma value
     frequency : int
-        [description]
+        Reproductive events occur every x time steps
     population : str
-        [description]
+        Either 'mutant wild' or 'hypothetical wild type'
     mu : float, optional
-        [description], by default None
+        The mu value, by default None
     alpha : float, optional
-        [description], by default None
+        The alpha value, by default None
     kappa : float, optional
-        [description], by default None
+        The kappa value, by default None
 
     Returns
     -------
     np.ndarray
-        [description]
+        A 1D array with shape (t_m,) representing average number of female offspring produced at time t
     """
     t_arr = np.arange(0, t_m)
     fertility = sigma * (1 + gamma * t_arr / t_m)
     for t in t_arr:
-        # First birth term starts at t = frequency - 1 (i.e. not t = 0)
-        if (
-            t % frequency != frequency - 1
-        ):  
+        # First reproductive event starts at t = frequency - 1 (i.e. not t = 0)
+        if t % frequency != frequency - 1:
             fertility[t] = 0.0
 
     if population == HYP_WILD_TYPE:
