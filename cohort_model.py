@@ -72,7 +72,7 @@ def get_hazard_rate(
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
     if population == HYP_WILD_TYPE:
         if beta and t_m == np.inf:
-            raise ValueError("When using a beta value, t_m must also be defined.")
+            raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_parameters.")
         return hazard_rate_wt * (1 - beta * t / t_m) + (omega * t ** tau)
 
     raise ValueError(

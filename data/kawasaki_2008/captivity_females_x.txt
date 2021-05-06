@@ -1,0 +1,11 @@
+# x axis data points extracted from Figure ? in 
+# N. Kawasaki, C. E. Brassil, R. C. Brooks, R. Bonduriansky, Environmental effects on the expression of life span and aging: An extreme contrast between wild and captive cohorts of Telostylinus angusticollis (Diptera: Neriidae). Am. Nat. 172, 346–357 (2008) 
+# and scaled to max age = 100 in the wild, per Figure ?.
+0.000000000000000000e+00
+8.125000000000000000e+01
+1.141891891891891930e+02
+1.614020270270270316e+02
+1.998310810810810949e+02
+2.393581081081081265e+02
+2.635135135135135442e+02
+3.250000000000000000e+02

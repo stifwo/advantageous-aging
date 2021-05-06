@@ -1,0 +1,9 @@
+# y axis data points extracted from Figure ? in 
+# S. N. Austad, Life extension by dietary restriction in the 
+# bowl and doily spider, Frontinella pyramitela. 
+# Exp. Gerontol. 24, 83–92 (1989).
+1.000000000000000000e+00
+8.894999999999999574e-01
+5.919999999999999707e-01
+1.739999999999999880e-01
+2.390000000000000110e-02
