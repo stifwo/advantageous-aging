@@ -26,7 +26,7 @@ def get_hazard_rate(
     # Ditto for omega og tau
     # TODO: Sett alpha og kappa til 0 også?
     # TODO: Sett inn tester?
-    """Calculates the hazard rate for the specified population using the provided parameters. 
+    """Calculate the hazard rate for the specified population using the provided parameters. 
 
     Explanations for each parameter and their application are given in Omholt and Kirkwood (2021).
 
@@ -81,9 +81,24 @@ def get_hazard_rate(
 
 
 def darwinian_lottery(cohort: np.ndarray, hazard_rate_parameters: dict) -> np.ndarray:
+    """Determine which individuals in cohort remain alive from time step t to t + 1.
+
+    Parameters
+    ----------
+    cohort : np.ndarray
+        A 1D array of 1s and 0s, representing living and dead individuals, respectively
+    hazard_rate_parameters : dict
+        A dictionary containing minimally the population and time step t, and any 
+        other parameters necessary for calculating the hazard rate (alpha, kappa, etc.)
+
+    Returns
+    -------
+    np.ndarray
+        A 1D array of 1s and 0s, where some of the original 1s are now 0s
+    """
     number_of_individuals = cohort.shape[0]
     hazard = get_hazard_rate(**hazard_rate_parameters)
-    lottery_tickets = cohort * np.random.random_sample(number_of_individuals)
+    lottery_tickets = cohort * np.random.random_sample(number_of_individuals) # An array with a random number [0.0, 1.0) for each remaining individual in cohort
     survivors = np.piecewise(
         lottery_tickets, [lottery_tickets <= hazard, lottery_tickets > hazard], [0, 1]
     )
@@ -91,25 +106,54 @@ def darwinian_lottery(cohort: np.ndarray, hazard_rate_parameters: dict) -> np.nd
 
 
 def cohort_survivorship_model(
-    cohort_survivorship: np.ndarray, hazard_rate_parameters: dict, t_m: int
+    cohort: np.ndarray, hazard_rate_parameters: dict, t_m: int
 ) -> np.ndarray:
+    """Recursively generate cohort survivorship data.
 
-    # On first run, make 1D array into 2D
-    if len(cohort_survivorship.shape) == 1:
-        cohort_survivorship = cohort_survivorship.reshape(1, -1)
+    The "raw" suffix of cohort_survivorship_raw variable is meant to indicate
+    that it has not yet been aggregated.
 
-    t = cohort_survivorship.shape[0]  # Time step variable
+    Parameters
+    ----------
+    cohort : np.ndarray
+        A 1D array containing all 1s, representing living individuals
+        (On subsequent recursive calls, this is a 2D array of 1s and 0s, where
+        each column represents one individual and each row a single time step
+        for the entire cohort)
+    hazard_rate_parameters : dict
+        A dictionary containing minimally the population, and any other 
+        parameters necessary for calculating the hazard rate (alpha, kappa, etc.)
+    t_m : int
+        The maximum time step
+
+    Returns
+    -------
+    np.ndarray
+        The unaggregated cohort survivorship, i.e. a 2D array of 1s and 0s with
+        shape (t_m, number of individuals), where each column represents one
+        individual and
+        each row a single time step for the entire cohort
+    """
+    # TODO: Refactor sånn at t_m er inne i hazard_rate_params?
+
+    # On first run, reshape 1D input array to 2D
+    if len(cohort.shape) == 1:
+        cohort_survivorship_raw = cohort.reshape(1, -1)
+    else:
+        cohort_survivorship_raw = cohort
+
+    t = cohort_survivorship_raw.shape[0]  # Time step variable
     hazard_rate_parameters["t"] = t
 
-    current_cohort = cohort_survivorship[-1]
+    current_cohort = cohort_survivorship_raw[-1] # Select cohort at its latest time step
 
     if t >= t_m:
-        return cohort_survivorship
+        return cohort_survivorship_raw
     survivors = darwinian_lottery(current_cohort, hazard_rate_parameters)
-    cohort_survivorship = np.append(
-        cohort_survivorship, survivors.reshape(1, -1), axis=0
+    cohort_survivorship_raw = np.append(
+        cohort_survivorship_raw, survivors.reshape(1, -1), axis=0
     )
-    return cohort_survivorship_model(cohort_survivorship, hazard_rate_parameters, t_m)
+    return cohort_survivorship_model(cohort_survivorship_raw, hazard_rate_parameters, t_m)
 
 
 def run_simulation(
@@ -119,6 +163,7 @@ def run_simulation(
     t_m: int,
     population: str,
 ) -> np.ndarray:
+    # TODO: Refactor sånn at den ikke tar inn cohort, men number_of_individuals
 
     hazard_rate_parameters["population"] = population
 
@@ -142,7 +187,7 @@ def get_cohort_model_data(
     alpha: float,
     kappa: float,
     epsilon: float,
-    hazard_rate_wild_type: float,
+    hazard_rate_wt: float,
     number_of_repetitions: int,
     beta: float = 0,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -151,7 +196,7 @@ def get_cohort_model_data(
 
     hazard_rate_parameters = dict(
         epsilon=epsilon,
-        hazard_rate_wild_type=hazard_rate_wild_type,
+        hazard_rate_wt=hazard_rate_wt,
         alpha=alpha,
         kappa=kappa,
         beta=beta,
@@ -205,7 +250,7 @@ def population_survivorship_difference(
         for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
             hazard_rate_parameters = dict(
                 epsilon=epsilon,
-                hazard_rate_wild_type=hazard_rate_wt,
+                hazard_rate_wt=hazard_rate_wt,
                 alpha=alpha,
                 kappa=kappa,
                 beta=beta,
