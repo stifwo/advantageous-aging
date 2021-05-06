@@ -37,7 +37,7 @@ def plot_fig_1(
     )
 
     # Empirical data from Austad (1989)
-    # TODO: Import from text file, show calculations etc.
+    # TODO: Import from text files
     X_C = [0, 30 * 217 / 65, 40 * 217 / 65, 51 * 217 / 65, 60 * 217 / 65]
     Y_C = [1.0, 0.8895, 0.592, 0.174, 0.0239]
     ax.plot(X_C, Y_C, "ro", markersize=4)
@@ -167,7 +167,7 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
     )
     ax1.bar(
         y3_pos, dummy_R0, width=0.3, color="w"
-    )  # The width spec does not seem to work. width only refers to the relative width in the slot..
+    )  # The width spec does not seem to work. width only refers to the relative width in the slot.
 
     ax1.set_ylabel("R0", fontsize=14)
 
