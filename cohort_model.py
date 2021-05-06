@@ -297,9 +297,13 @@ def population_survivorship_difference(
                 repetition_count, individual_count, hazard_rate_parameters, t_m
             )
             population_simulations[population].append(population_survivorship)
-        population_simulations[population] = np.array(population_simulations[population])
+        population_simulations[population] = np.array(
+            population_simulations[population]
+        )
 
-    survivorship_diff = population_simulations[populations[0]] - population_simulations[populations[1]]
+    survivorship_diff = (
+        population_simulations[populations[0]] - population_simulations[populations[1]]
+    )
 
     mean_diff = np.mean(survivorship_diff, axis=1)
     std_diff = np.std(survivorship_diff, axis=1)
