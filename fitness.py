@@ -49,7 +49,7 @@ def get_fecundity(
     return fecundity
 
 
-def euler_lotka(r: float, f: np.ndarray[float], t: np.ndarray[int]) -> np.ndarray:
+def euler_lotka(r: float, f: np.ndarray, t: np.ndarray) -> np.ndarray:
     """The Euler–Lotka equation.
 
     See Eq. 7 in Omholt and Kirkwood (2021).
@@ -161,7 +161,7 @@ def homarus_fertility(
     alpha: float = None,
     kappa: float = None,
 ) -> np.ndarray:
-    # TODO: Summary correct with respect to female offspring?
+    # TODO: Is the summary correct with respect to female offspring?
     """Get the average number of female offspring at age t based on model of Homarus gammarus fertility.
 
     Explanations for parameters are given in Omholt and Kirkwood (2021).

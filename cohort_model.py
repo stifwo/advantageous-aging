@@ -61,6 +61,8 @@ def get_hazard_rate(
     """
 
     if population == MUTANT_WILD:
+        if beta and t_m == np.inf:
+            raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_parameters.")
         return (
             (1 - epsilon) * hazard_rate_wt * (1 - beta * t / t_m)
             + alpha * (((1 + kappa) ** (t + 1)) - 1)
@@ -69,6 +71,8 @@ def get_hazard_rate(
     if population == MUTANT_CAP:
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
     if population == HYP_WILD_TYPE:
+        if beta and t_m == np.inf:
+            raise ValueError("When using a beta value, t_m must also be defined.")
         return hazard_rate_wt * (1 - beta * t / t_m) + (omega * t ** tau)
 
     raise ValueError(
