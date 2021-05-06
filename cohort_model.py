@@ -183,7 +183,7 @@ def run_simulation(
     repetition_count : int
         The number of repetitions to perform
     individual_count : int
-        The number of individuals in the cohort
+        The number of individuals in each cohort
     hazard_rate_parameters : dict
         A dictionary containing minimally the chosen population and the hazard rate of
         the wild type, and optionally any other parameters necessary for
@@ -229,8 +229,8 @@ def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[np.ndarray, n
     Returns
     -------
     Tuple[np.ndarray, np.ndarray]
-        First array: a 1D array with the normalized mean values for each time step
-        Second array: a 1D array with the normalized standard deviations for each time step
+        1: A 1D array with the normalized mean values for each time step
+        2: A 1D array with the normalized standard deviations for each time step
     """
     individual_count = population_survivorship[0, 0]
     mean = np.mean(population_survivorship, axis=0) * (1 / individual_count)
@@ -239,47 +239,72 @@ def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[np.ndarray, n
 
 
 def population_survivorship_difference(
-    individual_count,
-    repetition_count,
-    epsilons,
-    hazard_rates_wt,
-    alpha,
-    kappa,
-    t_m,
-    populations=(MUTANT_WILD, HYP_WILD_TYPE),
-    beta=0,
-    omega=0,
-    tau=0,
-):
-    # TODO: Refactor to take in a hazard rate parameter dictionary instead of all these individual parameters
-    # #Calculates the difference in number of survivors between hypothetical wild type and mutant across the given time span
-    
+    populations: Tuple[str, str], 
+    individual_count: int,
+    repetition_count: int,
+    epsilons: np.ndarray,
+    hazard_rates_wt: np.ndarray,
+    t_m: int,
+    hazard_rate_parameters: dict,
+) -> Tuple[dict, np.ndarray, np.ndarray]:
+    """Compare survivorship data of two populations.
+
+    Calculates the difference in number of survivors between two populations
+    across the given time span, for each (epsilon, hazard_rate_wt) pair
+
+    Returns the survivorship data for each population (for each 
+    (epsilon, hazard_rate_wt) pair), and the calculated mean of the difference
+    and standard deviation of the difference between them (for each (epsilon,
+    hazard_rate_wt) pair).
+
+    Parameters
+    ----------
+    populations : Tuple[str, str]
+        A tuple of the two populations to compare, e.g. (MUTANT_WILD, HYP_WILD_TYPE)
+        NB! The data of the second population will be subtracted from the first population
+    individual_count : int
+        The number of individuals in each cohort
+    repetition_count : int
+        The number of repetitions to perform per population
+    epsilons : np.ndarray
+        An array of epsilon values to evaluate
+    hazard_rates_wt : np.ndarray
+        An array of hazard rate (wild type) values to evaluate
+    t_m : int
+        The maximum time step
+    hazard_rate_parameters : dict
+        A dictionary defining values for alpha and kappa, 
+        and optionally additional values for for beta, omega, tau 
+
+    Returns
+    -------
+    Tuple[dict, np.ndarray, np.ndarray]
+        1: Dictionary with population survivorship data for each population 
+        (for each (epsilon, hazard_rate_wt) pair), with population names as keys
+        2: A 1D array with the mean of the difference between the populations 
+        (for each (epsilon, hazard_rate_wt) pair)
+        3: A 1D array with the standard deviation of the difference between the
+        populations (for each (epsilon, hazard_rate_wt) pair)
+    """
     population_simulations = defaultdict(list)
 
     for population in populations:
-        np.random.seed(
-            1729
-        )  # Reset seed to produce the same pseudo-random number sequence for each population
+        hazard_rate_parameters["population"] = population
+        # Reset seed to produce the same pseudo-random number sequence for each
+        # population to ensure accurate comparison
+        np.random.seed(1729)  
         for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
-            hazard_rate_parameters = dict(
-                epsilon=epsilon,
-                hazard_rate_wt=hazard_rate_wt,
-                alpha=alpha,
-                kappa=kappa,
-                beta=beta,
-                omega=omega,
-                tau=tau,
-            )
+            hazard_rate_parameters["epsilon"] = epsilon
+            hazard_rate_parameters["hazard_rate_wt"] = hazard_rate_wt
             cohort_simulation = run_simulation(
-                repetition_count, individual_count, hazard_rate_parameters, t_m, population
+                repetition_count, individual_count, hazard_rate_parameters, t_m
             )
             population_simulations[population].append(cohort_simulation)
 
-    # TODO: litt dårlig kode her med både populations og MUTANT_WILD, HYP_WILD_TYPE konstantene
-    diff = np.array(population_simulations[MUTANT_WILD]) - np.array(
-        population_simulations[HYP_WILD_TYPE]
+    survivorship_diff = np.array(population_simulations[populations[0]]) - np.array(
+        population_simulations[populations[1]]
     )
-    mean_diff = np.mean(diff, axis=1)
-    std_diff = np.std(diff, axis=1)
+    mean_diff = np.mean(survivorship_diff, axis=1)
+    std_diff = np.std(survivorship_diff, axis=1)
 
     return population_simulations, mean_diff, std_diff
