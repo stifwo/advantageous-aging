@@ -176,7 +176,7 @@ def run_simulation(
     subject to the same hereditary and environmental conditions. 
 
     Thus, the term "population survivorship" is taken in this context as a set
-    of survivorship data for multiple cohorts from the same population.
+    of survivorship arrays for multiple cohorts from the same population.
 
     Parameters
     ----------
@@ -211,9 +211,27 @@ def run_simulation(
     return np.array(population_survivorship)
 
 
-def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[float, float]:
-    # Normalized # Assumes simulation always starts with all individuals alive
+def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Get the normalized mean and standard deviation of a population survivorship.
 
+    The function assumes that each cohort always starts out with all individuals
+    alive.
+
+    The term "population survivorship" is taken in this context as a set
+    of survivorship arrays for multiple cohorts from the same population.
+
+    Parameters
+    ----------
+    population_survivorship : np.ndarray
+        A 2D array with shape (repetition count, max time step), where each column
+        represents a time step and each row is a separate cohort survivorship array
+
+    Returns
+    -------
+    Tuple[np.ndarray, np.ndarray]
+        First array: a 1D array with the normalized mean values for each time step
+        Second array: a 1D array with the normalized standard deviations for each time step
+    """
     individual_count = population_survivorship[0, 0]
     mean = np.mean(population_survivorship, axis=0) * (1 / individual_count)
     std = np.std(population_survivorship * (1 / individual_count), axis=0)
