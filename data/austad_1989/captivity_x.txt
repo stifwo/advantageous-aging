@@ -1,0 +1,10 @@
+# x axis data points extracted from Figure ? in 
+# S. N. Austad, Life extension by dietary restriction in the 
+# bowl and doily spider, Frontinella pyramitela. 
+# Exp. Gerontol. 24, 83–92 (1989) 
+# and scaled to max age in the wild = 100, per Figure ?.
+0.000000000000000000e+00
+1.001538461538461604e+02
+1.335384615384615472e+02
+1.702615384615384642e+02
+2.003076923076923208e+02
