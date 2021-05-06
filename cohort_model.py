@@ -89,7 +89,7 @@ def darwinian_lottery(cohort: np.ndarray, hazard_rate_parameters: dict) -> np.nd
     cohort : np.ndarray
         A 1D array of 1s and 0s, representing living and dead individuals, respectively
     hazard_rate_parameters : dict
-        A dictionary containing minimally the population and time step t, and any
+        A dictionary containing minimally the chosen population and time step t, and any
         other parameters necessary for calculating the hazard rate (alpha, kappa, etc.)
 
     Returns
@@ -126,7 +126,7 @@ def cohort_survivorship_model(
         each column represents one individual and each row a single time step
         for the entire cohort)
     hazard_rate_parameters : dict
-        A dictionary containing minimally the population and the hazard rate of
+        A dictionary containing minimally the chosen population and the hazard rate of
         the wild type, and optionally any other parameters necessary for
         calculating the hazard rate for the given population (alpha, kappa, etc.)
     t_m : int
@@ -169,7 +169,6 @@ def run_simulation(
     individual_count: int,
     hazard_rate_parameters: dict,
     t_m: int,
-    population: str,
 ) -> np.ndarray:
     """[summary]
 
@@ -186,14 +185,11 @@ def run_simulation(
     individual_count : int
         The number of individuals in the cohort
     hazard_rate_parameters : dict
-        A dictionary containing minimally the population and the hazard rate of
+        A dictionary containing minimally the chosen population and the hazard rate of
         the wild type, and optionally any other parameters necessary for
         calculating the hazard rate for the given population (alpha, kappa, etc.)
     t_m : int
         The maximum time step
-    population : str
-        One of the three population string constants defined in this module;
-        MUTANT_CAP, MUTANT_WILD or HYP_WILD_TYPE
 
     Returns
     -------
@@ -201,10 +197,7 @@ def run_simulation(
         A 2D array with shape (repetition_count, t_m), where each column
         represents a time step and each row is a separate cohort survivorship array
     """
-    # TODO: Refactor BRUK sånn at den ikke tar inn cohort, men individual_count
-    # TODO: Refactor sånn at population allerede er i hazard_rate_params
     cohort = np.ones(individual_count)
-    hazard_rate_parameters["population"] = population
 
     population_survivorship = []
     for _ in range(repetition_count):
@@ -216,40 +209,6 @@ def run_simulation(
         population_survivorship.append(cohort_survivorship)
 
     return np.array(population_survivorship)
-
-
-def get_cohort_model_data(
-    t_m_captivity: int,
-    t_m_wild: int,
-    t_m_hyp_wt: int,
-    individual_count: int,
-    alpha: float,
-    kappa: float,
-    epsilon: float,
-    hazard_rate_wt: float,
-    repetition_count: int,
-    beta: float = 0,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-
-    hazard_rate_parameters = dict(
-        epsilon=epsilon,
-        hazard_rate_wt=hazard_rate_wt,
-        alpha=alpha,
-        kappa=kappa,
-        beta=beta,
-    )
-
-    captivity_population = run_simulation(
-        repetition_count, individual_count, hazard_rate_parameters, t_m_captivity, MUTANT_CAP
-    )
-    wild_population = run_simulation(
-        repetition_count, individual_count, hazard_rate_parameters, t_m_wild, MUTANT_WILD
-    )
-    hyp_wt_population = run_simulation(
-        repetition_count, individual_count, hazard_rate_parameters, t_m_hyp_wt, HYP_WILD_TYPE
-    )
-
-    return captivity_population, wild_population, hyp_wt_population
 
 
 def get_mean_and_std(population_survivorship: np.ndarray) -> Tuple[float, float]:
