@@ -6,7 +6,7 @@ The paper presents three case studies that are used to validate the evolutionary
 
 The main intention with this repository is to allow others to check that the code faithfully reflects and reproduces what is written and presented in the paper. The case studies in this repository are complete only when read together with their corresponding text in the paper.
 
-It is our hope that the underlying code can be used in teaching as well in research. Concerning the latter, if you possess survivorship data for an organism in the wild as well as in a protected environment, it should be straight-forward to use the code to test how well our life-history model can accommodate for your data.
+It is our hope that the underlying code can be used in teaching as well as in research. Concerning the latter, if you possess survivorship data for an organism in the wild as well as in a protected environment, it should be straight-forward to use the code to test how well our life-history model can accommodate for your data.
 
 The original code has most kindly been fully refactored by [Oda Omholt](https://github.com/odaom) in order to ease readability and reuse.
 
