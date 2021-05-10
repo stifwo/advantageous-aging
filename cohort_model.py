@@ -163,7 +163,7 @@ def cohort_survivorship_model(
     )
 
 
-def run_simulation(
+def run_cohort_simulation(
     repetition_count: int,
     individual_count: int,
     hazard_rate_parameters: dict,
@@ -297,7 +297,7 @@ def population_survivorship_difference(
         for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
             hazard_rate_parameters["epsilon"] = epsilon
             hazard_rate_parameters["hazard_rate_wt"] = hazard_rate_wt
-            population_survivorship = run_simulation(
+            population_survivorship = run_cohort_simulation(
                 repetition_count, individual_count, hazard_rate_parameters, t_m
             )
             population_simulations[population].append(population_survivorship)
