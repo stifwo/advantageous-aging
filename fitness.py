@@ -98,6 +98,10 @@ def get_fitness_data(
 ) -> dict:
     """Get R0 and r data for a population for each epsilon–hazard rate wt pair.
 
+    The method for solving for r is adapted from 
+    https://scipython.com/book/chapter-8-scipy/examples/solving-the-euler-lotka-equation/ 
+    (accessed 2021-05-10)
+
     Parameters
     ----------
     population_simulation : np.ndarray
