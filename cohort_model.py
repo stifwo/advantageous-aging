@@ -38,7 +38,7 @@ def _get_hazard_rate(
 ) -> float:
     """Calculate the hazard rate for the specified population using the provided parameters.
 
-    Explanations for each parameter and their application are given in Omholt and Kirkwood (2021).
+    Explanations fof the parameters and their application are given in Omholt and Kirkwood (2021).
 
     Parameters
     ----------
@@ -76,7 +76,7 @@ def _get_hazard_rate(
     """
 
     if population == MUT_WILD:
-        if beta and t_m == np.inf:
+        if t_m == np.inf and beta:
             raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_params.")
         return (
             (1 - epsilon) * hazard_rate_hypwt * (1 - beta * t / t_m)
@@ -86,7 +86,7 @@ def _get_hazard_rate(
     if population == MUT_CAPTIVITY:
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
     if population == HYP_WILDTYPE:
-        if beta and t_m == np.inf:
+        if t_m == np.inf and beta:
             raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_params.")
         return hazard_rate_hypwt * (1 - beta * t / t_m) + (omega * t ** tau)
 
@@ -127,10 +127,10 @@ def cohort_survivorship_model(
 ) -> np.ndarray:
     """Recursively generate cohort survivorship data.
 
-    The term "cohort survivorship" is taken in this context as the proportion of a
-    cohort surviving to a given age, i.e. to any given time step. The "raw"
-    suffix of the cohort_survivorship_raw variable is meant to indicate that it
-    has not yet been aggregated.
+    The term "cohort survivorship" means the proportion of a cohort surviving
+    to a given age, i.e. to any given time step. The "raw" suffix of the 
+    cohort_survivorship_raw variable is meant to indicate that it has not yet 
+    been aggregated.
 
     Parameters
     ----------
@@ -184,11 +184,11 @@ def run_cohort_simulation(
 ) -> np.ndarray:
     """Run cohort model repeatedly and return aggregated results.
 
-    The term "population" is chosen to represent a set of cohorts
-    subject to the same hereditary and environmental conditions.
-
-    Thus, the term "population survivorship" is taken in this context as a set
-    of survivorship arrays for multiple cohorts from the same population.
+    The term "population" means a set of cohorts subject to the same
+    environmental conditions.
+    
+    Thus, the term "population survivorship" refers to a set of survivorship
+    arrays for multiple cohorts from the same population.
 
     Parameters
     ----------
@@ -230,9 +230,6 @@ def get_mean_and_std(
 
     The function assumes that each cohort always starts out with all individuals
     alive.
-
-    The term "population survivorship" is taken in this context as a set
-    of survivorship arrays for multiple cohorts from the same population.
 
     Parameters
     ----------
