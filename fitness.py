@@ -18,12 +18,11 @@ from cohort_model import HYP_WILDTYPE, MUT_WILD
 def get_fecundity(
     population_survivorship: np.ndarray, fertility: 'list[Tuple[int, float]]'
 ) -> np.ndarray:
-    """Calculate the fecundity of a population.
+    """Calculate m(t) * l(t).
 
-    Fecundity at time t is m(t) * l(t), i.e. the average number of female
-    offspring produced by a female at time t * the probability of being alive
-    at time t. The fecundity is calculated separately for each cohort in the
-    population.
+    This is the average number of female offspring produced by a female at time
+    t * the probability of being alive at time t. The fecundity is calculated
+    separately for each cohort in the population.
 
     This function assumes all individuals are alive at the beginning.
 
@@ -81,7 +80,7 @@ def euler_lotka(r: float, f: np.ndarray, t: np.ndarray) -> np.ndarray:
 
 
 def get_mean_and_sem(arr: np.ndarray) -> Tuple[float, float]:
-    """Return mean and standard error of the mean of an array.
+    """Return mean and standard error of an array.
 
     The mean and sem are not normalized.
 
@@ -94,7 +93,7 @@ def get_mean_and_sem(arr: np.ndarray) -> Tuple[float, float]:
     -------
     Tuple[float, float]
         1: The mean of the input array
-        2: The standard error of the mean of the input array
+        2: The standard error of the input array
     """
     repetition_count = arr.shape[0]
     mean = np.mean(arr)
