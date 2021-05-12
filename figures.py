@@ -12,11 +12,11 @@ def plot_fig_1(
     t_m_captivity,
     t_m_wild,
     t_m_hyp_wt,
-    mean_captivity,
-    std_captivity,
-    mean_wild,
-    mean_hyp_wt,
-    std_hyp_wt,
+    captivity_mean,
+    captivity_std,
+    wild_mean,
+    hyp_wt_mean,
+    hyp_wt_std,
 ):
 
     captivity_x = np.arange(0, t_m_captivity)
@@ -24,20 +24,20 @@ def plot_fig_1(
 
     fig, ax = plt.subplots(figsize=(6, 6))
 
-    ax.plot(captivity_x, mean_captivity, 'r-')
+    ax.plot(captivity_x, captivity_mean, 'r-')
     ax.fill_between(
         range(t_m_captivity),
-        mean_captivity - 3.0 * std_captivity,
-        mean_captivity + 3.0 * std_captivity,
+        captivity_mean - 3.0 * captivity_std,
+        captivity_mean + 3.0 * captivity_std,
         color='pink',
         alpha=0.5,
     )
 
-    ax.plot(wild_x, mean_wild, 'b-')
+    ax.plot(wild_x, wild_mean, 'b-')
     ax.fill_between(
         range(t_m_hyp_wt),
-        mean_hyp_wt - 3.0 * std_hyp_wt,
-        mean_hyp_wt + 3.0 * std_hyp_wt,
+        hyp_wt_mean - 3.0 * hyp_wt_std,
+        hyp_wt_mean + 3.0 * hyp_wt_std,
         color='lightblue',
         alpha=0.5,
     )
