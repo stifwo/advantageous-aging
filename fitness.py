@@ -96,7 +96,7 @@ def get_mean_and_sem(arr: np.ndarray) -> Tuple[float, float]:
 
 
 def get_fitness_data(
-    population_simulation: np.ndarray, fertility: "list[Tuple[int, float]]"
+    population_simulation: np.ndarray, fertility: 'list[Tuple[int, float]]'
 ) -> dict:
     """Get R0 and r data for a population for each epsilon–hazard rate wt pair.
 
