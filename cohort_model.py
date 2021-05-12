@@ -6,9 +6,9 @@ from typing import Tuple
 import numpy as np
 
 
-MUTANT_CAP = "mutant captivity"
-MUTANT_WILD = "mutant wild"
-HYP_WILD_TYPE = "hypothetical wild type"
+MUTANT_CAP = 'mutant captivity'
+MUTANT_WILD = 'mutant wild'
+HYP_WILD_TYPE = 'hypothetical wild type'
 
 
 def get_hazard_rate(
@@ -147,7 +147,7 @@ def cohort_survivorship_model(
         cohort_survivorship_raw = cohort
 
     t = cohort_survivorship_raw.shape[0]  # Time step variable
-    hazard_rate_parameters["t"] = t
+    hazard_rate_parameters['t'] = t
 
     # Select cohort at its latest time step
     current_cohort = cohort_survivorship_raw[-1]
@@ -290,13 +290,13 @@ def population_survivorship_difference(
     population_simulations = defaultdict(list)
 
     for population in populations:
-        hazard_rate_parameters["population"] = population
+        hazard_rate_parameters['population'] = population
         # Reset seed to produce the same pseudo-random number sequence for each
         # population to ensure accurate comparison
         np.random.seed(1729)
         for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
-            hazard_rate_parameters["epsilon"] = epsilon
-            hazard_rate_parameters["hazard_rate_wt"] = hazard_rate_wt
+            hazard_rate_parameters['epsilon'] = epsilon
+            hazard_rate_parameters['hazard_rate_wt'] = hazard_rate_wt
             population_survivorship = run_cohort_simulation(
                 repetition_count, individual_count, hazard_rate_parameters, t_m
             )
