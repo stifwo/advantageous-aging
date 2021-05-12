@@ -68,7 +68,7 @@ def plot_fig_1(
     figure.savefig(f'{ROOT_DIR}/figures/PNAS_fig1_Frontinella.pdf', dpi=1200, bbox_inches='tight')
 
 
-def plot_fig_2(t_m, mean_diff, std_diff, repetition_count):
+def plot_fig_2(t_m, mean_diff, std_diff, repetition_count, save_pdf=True):
     C = np.arange(0, t_m, 1, dtype=int)
     fig1, ax = plt.subplots(figsize=(6, 6))
     (l1,) = ax.plot(C, mean_diff[0])
@@ -120,7 +120,8 @@ def plot_fig_2(t_m, mean_diff, std_diff, repetition_count):
 
     figure = plt.gcf()
     figure.set_size_inches(3.42, 3.42)
-    plt.savefig(f'{ROOT_DIR}/figures/PNAS_fig2_Frontinella.pdf', dpi=1200, bbox_inches='tight')
+    if save_pdf:
+        plt.savefig(f'{ROOT_DIR}/figures/PNAS_fig2_Frontinella.pdf', dpi=1200, bbox_inches='tight')
 
 
 def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
