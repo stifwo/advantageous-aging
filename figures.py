@@ -1,3 +1,5 @@
+"""This module does blah blah.""" # TODO
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -36,10 +38,11 @@ def plot_fig_1(
         alpha=0.5,
     )
 
-    # Empirical data from Austad (1989)
-    # TODO: Import from text files
-    X_C = [0, 30 * 217 / 65, 40 * 217 / 65, 51 * 217 / 65, 60 * 217 / 65]
-    Y_C = [1.0, 0.8895, 0.592, 0.174, 0.0239]
+    # TODO: Fjern utkommenterte hardkodede data under
+
+    # Plotting wild data (extraction from Austad (1989))
+    X_C = np.genfromtext('data/austad_1989/captivity_x.txt') # [0, 30 * 217 / 65, 40 * 217 / 65, 51 * 217 / 65, 60 * 217 / 65]
+    Y_C = np.genfromtext('data/austad_1989/captivity_y.txt') # [1.0, 0.8895, 0.592, 0.174, 0.0239]
     ax.plot(X_C, Y_C, "ro", markersize=4)
 
     X_W = [0, 5 * 100 / 30, 10 * 100 / 30, 15 * 100 / 30, 20 * 100 / 30, 30 * 100 / 30]
@@ -226,55 +229,35 @@ def plot_fig_4(
 ):
     fig, ax = plt.subplots(figsize=(6, 6))
 
-    # Plotting captive females
-    # Females captivity: extraction from Kawasaki et al 18.12.20
-    X_C_F = [
-        0,
-        325 * (37 / 148),
-        325 * (52 / 148),
-        325 * (73.5 / 148),
-        325 * (91 / 148),
-        325 * (109 / 148),
-        325 * (120 / 148),
-        325 * (148 / 148),
-    ]
-    Y_C_F = [1.0, 0.9, 0.8, 0.6, 0.4, 0.2, 0.1, 0.0]
+    # TODO: Fjern utkommenterte hardkodede data under
+
+    # Plotting captive females (extraction from Kawasaki et al (2008))
+    X_C_F = np.genfromtext('data/kawasaki_2008/captivity_females_x.txt') # [ 0, 325 * (37 / 148), 325 * (52 / 148), 325 * (73.5 / 148), 325 * (91 / 148), 325 * (109 / 148), 325 * (120 / 148), 325 * (148 / 148), ]
+    Y_C_F = np.genfromtext('data/kawasaki_2008/captivity_females_y.txt') # [1.0, 0.9, 0.8, 0.6, 0.4, 0.2, 0.1, 0.0]
     ax.plot(X_C_F, Y_C_F, "ro", markersize=4)
 
     C1 = np.arange(0, t_m_cap_f)
     ax.plot(C1, mean_cap_f, "r-")
 
-    # Plotting captive males
-    # Males captivity: extraction from Kawasaki et al 18.12.20
-    X_C_M = [
-        0,
-        290 * (49 / 131.5),
-        290 * (61 / 131.5),
-        290 * (78 / 131.5),
-        290 * (91 / 131.5),
-        290 * (104 / 131.5),
-        290 * (112 / 131.5),
-        290 * (131.5 / 131.5),
-    ]
-    Y_C_M = [1.0, 0.9, 0.8, 0.6, 0.4, 0.2, 0.1, 0.0]
+    # Plotting captive males (extraction from Kawasaki et al (2008))
+    X_C_M = np.genfromtext('data/kawasaki_2008/captivity_males_x.txt') # [ 0, 290 * (49 / 131.5), 290 * (61 / 131.5), 290 * (78 / 131.5), 290 * (91 / 131.5), 290 * (104 / 131.5), 290 * (112 / 131.5), 290 * (131.5 / 131.5), ]
+    Y_C_M = np.genfromtext('data/kawasaki_2008/captivity_males_y.txt') # [1.0, 0.9, 0.8, 0.6, 0.4, 0.2, 0.1, 0.0]
     ax.plot(X_C_M, Y_C_M, "bo", markersize=4)
 
     C2 = np.arange(0, t_m_cap_m)
     ax.plot(C2, mean_cap_m, "b-")
 
-    # Plotting wild females
-    # Females wild: extraction from Kawasaki et al per 20 Dec 2020
-    X_W_F = [0, 100 * 2 / 45, 100 * 4 / 45, 100 * 8 / 45, 100 * 14 / 45, 100 * 45 / 45]
-    Y_W_F = [1.0, 0.8, 0.6, 0.4, 0.2, 0.0]
+    # Plotting wild females (extraction from Kawasaki et al (2008))
+    X_W_F = np.genfromtext('data/kawasaki_2008/wild_females_x.txt') # [0, 100 * 2 / 45, 100 * 4 / 45, 100 * 8 / 45, 100 * 14 / 45, 100 * 45 / 45]
+    Y_W_F = np.genfromtext('data/kawasaki_2008/wild_females_y.txt') # [1.0, 0.8, 0.6, 0.4, 0.2, 0.0]
     ax.plot(X_W_F, Y_W_F, "ro", markersize=4)
 
     C3 = np.arange(0, t_m_wild_f)
     ax.plot(C3, mean_wild_f, "r-")
 
-    # Plotting wild males
-    # Males wild: extraction from Kawasaki et al per 20 Dec 2020
-    X_W_M = [0, 53 * 2.5 / 24, 53 * 5 / 24, 53 * 8.5 / 24, 53 * 12 / 24, 53 * 24 / 24]
-    Y_W_M = [1.0, 0.8, 0.6, 0.4, 0.2, 0.0]
+    # Plotting wild males (extraction from Kawasaki et al (2008))
+    X_W_M = np.genfromtext('data/kawasaki_2008/wild_males_x.txt') # [0, 53 * 2.5 / 24, 53 * 5 / 24, 53 * 8.5 / 24, 53 * 12 / 24, 53 * 24 / 24]
+    Y_W_M = np.genfromtext('data/kawasaki_2008/wild_males_y.txt') # [1.0, 0.8, 0.6, 0.4, 0.2, 0.0]
     ax.plot(X_W_M, Y_W_M, "bo", markersize=4)
 
     C4 = np.arange(0, t_m_wild_m)

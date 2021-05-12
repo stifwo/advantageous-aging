@@ -1,3 +1,5 @@
+"""This module does blah blah.""" # TODO
+
 import math
 import numpy as np
 from typing import Tuple
