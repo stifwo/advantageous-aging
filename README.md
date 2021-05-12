@@ -1,4 +1,4 @@
-# Risky Ageing
+# Advantageous Aging
 
 The code in this repository produces the results in S. W. Omholt, T. B. L. Kirkwood, **Aging as a consequence of selection to reduce the environmental risk of dying**, *Proc. Natl. Acad. Sci. U.S.A.* **?**, ??-??, 2021.
 
