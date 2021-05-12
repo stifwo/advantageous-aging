@@ -1,4 +1,17 @@
-"""This module does blah blah.""" # TODO
+"""Cohort survivorship model utilities.
+
+This module provides functions for running the cohort survivorship model. The 
+cohort survivorship model is explained in detail in Omholt and Kirkwood (2021).
+
+The primary function to run the cohort model is run_cohort_simulation, which 
+runs the cohort model repeteadly and returns the survivorship data:
+
+    repetition_count = 1000
+    individual_count = 1000
+    t_m = 100
+    hazard_rate_params = dict(population=MUT_CAPTIVITY, alpha=0.002, kappa=0.008)
+    survivorship = run_cohort_simulation(repetition_count, individual_count, hazard_rate_params, t_m)
+""" 
 
 from collections import defaultdict
 from typing import Tuple
@@ -11,11 +24,11 @@ MUT_WILD = 'mutant wild'
 HYP_WILDTYPE = 'hypothetical wild type'
 
 
-def get_hazard_rate(
+def _get_hazard_rate(
     population: str,
     t: int,
     epsilon: float = None,
-    hazard_rate_wt: float = None,
+    hazard_rate_hypwt: float = None,
     alpha: float = None,
     kappa: float = None,
     beta: float = 0,
@@ -36,7 +49,7 @@ def get_hazard_rate(
         The current time step
     epsilon : float, optional
         The epsilon value, by default None
-    hazard_rate_wt : float, optional
+    hazard_rate_hypwt : float, optional
         The hazard rate of the wild type, by default None
     alpha : float, optional
         The alpha value, by default None
@@ -64,9 +77,9 @@ def get_hazard_rate(
 
     if population == MUT_WILD:
         if beta and t_m == np.inf:
-            raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_parameters.")
+            raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_params.")
         return (
-            (1 - epsilon) * hazard_rate_wt * (1 - beta * t / t_m)
+            (1 - epsilon) * hazard_rate_hypwt * (1 - beta * t / t_m)
             + alpha * (((1 + kappa) ** (t + 1)) - 1)
             + (omega * t ** tau)
         )
@@ -74,22 +87,22 @@ def get_hazard_rate(
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
     if population == HYP_WILDTYPE:
         if beta and t_m == np.inf:
-            raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_parameters.")
-        return hazard_rate_wt * (1 - beta * t / t_m) + (omega * t ** tau)
+            raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_params.")
+        return hazard_rate_hypwt * (1 - beta * t / t_m) + (omega * t ** tau)
 
     raise ValueError(
         "Population argument must be set to either 'mutant wild', 'mutant captivity' or 'hypothetical wild type'."
     )
 
 
-def darwinian_lottery(cohort: np.ndarray, hazard_rate_parameters: dict) -> np.ndarray:
+def _darwinian_lottery(cohort: np.ndarray, hazard_rate_params: dict) -> np.ndarray:
     """Determine which individuals in cohort remain alive from time step t to t + 1.
 
     Parameters
     ----------
     cohort : np.ndarray
         A 1D array of 1s and 0s, representing living and dead individuals, respectively
-    hazard_rate_parameters : dict
+    hazard_rate_params : dict
         A dictionary containing minimally the chosen population and time step t, and any
         other parameters necessary for calculating the hazard rate (alpha, kappa, etc.)
 
@@ -99,7 +112,7 @@ def darwinian_lottery(cohort: np.ndarray, hazard_rate_parameters: dict) -> np.nd
         A 1D array of 1s and 0s, where some of the original 1s are now 0s
     """
     individual_count = cohort.shape[0]
-    hazard = get_hazard_rate(**hazard_rate_parameters)
+    hazard = _get_hazard_rate(**hazard_rate_params)
     lottery_tickets = cohort * np.random.random_sample(
         individual_count
     )  # An array with a random number [0.0, 1.0) for each remaining individual in cohort
@@ -110,7 +123,7 @@ def darwinian_lottery(cohort: np.ndarray, hazard_rate_parameters: dict) -> np.nd
 
 
 def cohort_survivorship_model(
-    cohort: np.ndarray, hazard_rate_parameters: dict, t_m: int
+    cohort: np.ndarray, hazard_rate_params: dict, t_m: int
 ) -> np.ndarray:
     """Recursively generate cohort survivorship data.
 
@@ -126,7 +139,7 @@ def cohort_survivorship_model(
         (On subsequent recursive calls, this is a 2D array of 1s and 0s, where
         each column represents one individual and each row a single time step
         for the entire cohort)
-    hazard_rate_parameters : dict
+    hazard_rate_params : dict
         A dictionary containing minimally the chosen population and the hazard rate of
         the wild type, and optionally any other parameters necessary for
         calculating the hazard rate for the given population (alpha, kappa, etc.)
@@ -147,26 +160,26 @@ def cohort_survivorship_model(
         cohort_survivorship_raw = cohort
 
     t = cohort_survivorship_raw.shape[0]  # Time step variable
-    hazard_rate_parameters['t'] = t
+    hazard_rate_params['t'] = t
 
     # Select cohort at its latest time step
     current_cohort = cohort_survivorship_raw[-1]
 
     if t >= t_m:
         return cohort_survivorship_raw
-    survivors = darwinian_lottery(current_cohort, hazard_rate_parameters)
+    survivors = _darwinian_lottery(current_cohort, hazard_rate_params)
     cohort_survivorship_raw = np.append(
         cohort_survivorship_raw, survivors.reshape(1, -1), axis=0
     )
     return cohort_survivorship_model(
-        cohort_survivorship_raw, hazard_rate_parameters, t_m
+        cohort_survivorship_raw, hazard_rate_params, t_m
     )
 
 
 def run_cohort_simulation(
     repetition_count: int,
     individual_count: int,
-    hazard_rate_parameters: dict,
+    hazard_rate_params: dict,
     t_m: int,
 ) -> np.ndarray:
     """Run cohort model repeatedly and return aggregated results.
@@ -183,7 +196,7 @@ def run_cohort_simulation(
         The number of repetitions to perform
     individual_count : int
         The number of individuals in each cohort
-    hazard_rate_parameters : dict
+    hazard_rate_params : dict
         A dictionary containing minimally the chosen population and the hazard rate of
         the wild type, and optionally any other parameters necessary for
         calculating the hazard rate for the given population (alpha, kappa, etc.)
@@ -201,7 +214,7 @@ def run_cohort_simulation(
     population_survivorship = []
     for _ in range(repetition_count):
         cohort_survivorship = np.sum(
-            cohort_survivorship_model(cohort, hazard_rate_parameters, t_m),
+            cohort_survivorship_model(cohort, hazard_rate_params, t_m),
             axis=1,
             dtype=int,
         )
@@ -246,17 +259,17 @@ def population_survivorship_difference(
     epsilons: np.ndarray,
     hazard_rates_wt: np.ndarray,
     t_m: int,
-    hazard_rate_parameters: dict,
+    hazard_rate_params: dict,
 ) -> Tuple[dict, np.ndarray, np.ndarray]:
     """Compare survivorship data of two populations.
 
     Calculates the difference in number of survivors between two populations
-    across the given time span, for each (epsilon, hazard_rate_wt) pair
+    across the given time span, for each (epsilon, hazard_rate_hypwt) pair
 
     Returns the survivorship data for each population (for each
-    (epsilon, hazard_rate_wt) pair), and the calculated mean of the difference
+    (epsilon, hazard_rate_hypwt) pair), and the calculated mean of the difference
     and standard deviation of the difference between them (for each (epsilon,
-    hazard_rate_wt) pair).
+    hazard_rate_hypwt) pair).
 
     Parameters
     ----------
@@ -273,7 +286,7 @@ def population_survivorship_difference(
         An array of hazard rate (wild type) values to evaluate
     t_m : int
         The maximum time step
-    hazard_rate_parameters : dict
+    hazard_rate_params : dict
         A dictionary defining values for alpha and kappa,
         and optionally additional values for for beta, omega, tau
 
@@ -281,24 +294,24 @@ def population_survivorship_difference(
     -------
     Tuple[dict, np.ndarray, np.ndarray]
         1: Dictionary with population survivorship data for each population
-        (for each (epsilon, hazard_rate_wt) pair), with population names as keys
+        (for each (epsilon, hazard_rate_hypwt) pair), with population names as keys
         2: A 1D array with the mean of the difference between the populations
-        (for each (epsilon, hazard_rate_wt) pair)
+        (for each (epsilon, hazard_rate_hypwt) pair)
         3: A 1D array with the standard deviation of the difference between the
-        populations (for each (epsilon, hazard_rate_wt) pair)
+        populations (for each (epsilon, hazard_rate_hypwt) pair)
     """
     population_simulations = defaultdict(list)
 
     for population in populations:
-        hazard_rate_parameters['population'] = population
+        hazard_rate_params['population'] = population
         # Reset seed to produce the same pseudo-random number sequence for each
         # population to ensure accurate comparison
         np.random.seed(1729)
-        for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
-            hazard_rate_parameters['epsilon'] = epsilon
-            hazard_rate_parameters['hazard_rate_wt'] = hazard_rate_wt
+        for epsilon, hazard_rate_hypwt in zip(epsilons, hazard_rates_wt):
+            hazard_rate_params['epsilon'] = epsilon
+            hazard_rate_params['hazard_rate_hypwt'] = hazard_rate_hypwt
             population_survivorship = run_cohort_simulation(
-                repetition_count, individual_count, hazard_rate_parameters, t_m
+                repetition_count, individual_count, hazard_rate_params, t_m
             )
             population_simulations[population].append(population_survivorship)
         population_simulations[population] = np.array(
