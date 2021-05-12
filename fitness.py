@@ -1,4 +1,11 @@
-"""This module does blah blah.""" # TODO
+"""Fitness calculation utilities.
+
+This module provides functions for calculating fitness (R0 and r). 
+
+The primary function is get_fitness_data, which takes in an array of cohort
+survivorship simulations. Please see the usage in the provided case studies
+for context.
+""" 
 
 import math
 import numpy as np
@@ -9,7 +16,7 @@ from cohort_model import HYP_WILDTYPE, MUT_WILD
 
 
 def get_fecundity(
-    population_survivorship: np.ndarray, fertility: "list[Tuple[int, float]]"
+    population_survivorship: np.ndarray, fertility: 'list[Tuple[int, float]]'
 ) -> np.ndarray:
     """Calculate the fecundity of a population.
 

@@ -1,4 +1,4 @@
-"""This module does blah blah.""" # TODO
+"""Figure plotting utilities for figures in Omholt and Kirkwood (2021).""" 
 
 import os
 
