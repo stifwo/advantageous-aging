@@ -5,7 +5,7 @@ import numpy as np
 from typing import Tuple
 from scipy.optimize import brentq
 
-from cohort_model import HYP_WILD_TYPE, MUTANT_WILD
+from cohort_model import HYP_WILDTYPE, MUT_WILD
 
 
 def get_fecundity(
@@ -203,10 +203,10 @@ def homarus_fertility(
         if t % frequency != frequency - 1:
             fertility[t] = 0.0
 
-    if population == HYP_WILD_TYPE:
+    if population == HYP_WILDTYPE:
         return fertility
 
-    if population == MUTANT_WILD:
+    if population == MUT_WILD:
         for t in t_steps:
             fertility[t] = fertility[t] * (
                 1 - mu * alpha * ((1 + kappa) ** (t + 1) - 1)

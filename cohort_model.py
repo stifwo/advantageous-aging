@@ -6,9 +6,9 @@ from typing import Tuple
 import numpy as np
 
 
-MUTANT_CAP = 'mutant captivity'
-MUTANT_WILD = 'mutant wild'
-HYP_WILD_TYPE = 'hypothetical wild type'
+MUT_CAPTIVITY = 'mutant captivity'
+MUT_WILD = 'mutant wild'
+HYP_WILDTYPE = 'hypothetical wild type'
 
 
 def get_hazard_rate(
@@ -62,7 +62,7 @@ def get_hazard_rate(
         When population parameter is not one of the three valid options
     """
 
-    if population == MUTANT_WILD:
+    if population == MUT_WILD:
         if beta and t_m == np.inf:
             raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_parameters.")
         return (
@@ -70,9 +70,9 @@ def get_hazard_rate(
             + alpha * (((1 + kappa) ** (t + 1)) - 1)
             + (omega * t ** tau)
         )
-    if population == MUTANT_CAP:
+    if population == MUT_CAPTIVITY:
         return alpha * (((1 + kappa) ** (t + 1)) - 1)
-    if population == HYP_WILD_TYPE:
+    if population == HYP_WILDTYPE:
         if beta and t_m == np.inf:
             raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_parameters.")
         return hazard_rate_wt * (1 - beta * t / t_m) + (omega * t ** tau)
@@ -261,7 +261,7 @@ def population_survivorship_difference(
     Parameters
     ----------
     populations : Tuple[str, str]
-        A tuple of the two populations to compare, e.g. (MUTANT_WILD, HYP_WILD_TYPE)
+        A tuple of the two populations to compare, e.g. (MUT_WILD, HYP_WILDTYPE)
         NB! The data of the second population will be subtracted from the first population
     individual_count : int
         The number of individuals in each cohort
