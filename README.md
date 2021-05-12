@@ -32,6 +32,17 @@ The case studies are pre-run for immediate inspection, and may be further experi
 
 The logic of the cohort model and fitness calculations can be found in the modules `cohort_model` and `fitness`, respectively. 
 
+### Other sets of survivorship data
+If you possess survivorship data for an organism in the wild as well as in a protected environment, you should be able to use the code to test how well our life-history model can accommodate for your data. 
+
+1. Add a new directory containing your data in the ´data´ directory.
+1. Create a new notebook for parameter estimation (curve fitting)
+1. Adapt the curve fitting procedure from the parameter estimation notebooks for *Frontinella* and *Telostylinus*
+1. Run through the parameter space in multiple passes, with progressively smaller intervals and smaller steps
+1. When a satisfactory fit has been found, make note of the parameter values 
+1. Create a new notebook for your own case study, use the obtained parameter values and any relevant parts of the provided case studies
+
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
