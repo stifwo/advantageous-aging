@@ -2,11 +2,11 @@
 
 import numpy as np
 
-from cohort_model import run_cohort_simulation, MUTANT_CAP
+from cohort_model import run_cohort_simulation, MUT_CAPTIVITY
 
 def mean_survivorship(t, alpha, kappa, t_m, individual_count, repetition_count):
     """Return the mean survivorship values indexed on t."""
-    hazard_rate_parameters = dict(alpha=alpha, kappa=kappa, population=MUTANT_CAP)
+    hazard_rate_parameters = dict(alpha=alpha, kappa=kappa, population=MUT_CAPTIVITY)
     population_survivorship = run_cohort_simulation(repetition_count, individual_count, hazard_rate_parameters, t_m)
     survivorship_mean = np.mean(population_survivorship, axis=0)
     
