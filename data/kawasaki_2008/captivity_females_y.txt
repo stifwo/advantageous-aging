@@ -1,5 +1,9 @@
 # y axis data points extracted from Figure ? in 
-# N. Kawasaki, C. E. Brassil, R. C. Brooks, R. Bonduriansky, Environmental effects on the expression of life span and aging: An extreme contrast between wild and captive cohorts of Telostylinus angusticollis (Diptera: Neriidae). Am. Nat. 172, 346–357 (2008).
+# N. Kawasaki, C. E. Brassil, R. C. Brooks, R. Bonduriansky, 
+# Environmental effects on the expression of life span and aging: 
+# An extreme contrast between wild and captive cohorts of 
+# Telostylinus angusticollis (Diptera: Neriidae). Am. Nat. 172, 346–357 (2008) 
+# and rescaled such that t = 100 corresponds to 20 days
 1.000000000000000000e+00
 9.000000000000000222e-01
 8.000000000000000444e-01

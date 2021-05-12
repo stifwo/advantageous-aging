@@ -1,4 +1,4 @@
-# y axis data points extracted from Figure ? in 
+# y axis data points extracted from Figure 2 in 
 # S. N. Austad, Life extension by dietary restriction in the 
 # bowl and doily spider, Frontinella pyramitela. 
 # Exp. Gerontol. 24, 83–92 (1989).
