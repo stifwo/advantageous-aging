@@ -125,15 +125,15 @@ def plot_fig_2(t_m, mean_diff, std_diff, repetition_count, save_pdf=True):
 
 
 def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
-    mean_r0_wt = fitness_stats_wt['mean_r0']
-    sem_r0_wt = fitness_stats_wt['sem_r0']
-    mean_r_wt = fitness_stats_wt['mean_r']
-    sem_r_wt = fitness_stats_wt['sem_r']
+    r0_wt_mean = fitness_stats_wt['r0_mean']
+    r0_wt_sem = fitness_stats_wt['r0_sem']
+    r_wt_mean = fitness_stats_wt['r_mean']
+    r_wt_sem = fitness_stats_wt['r_sem']
 
-    mean_r0_mut = fitness_stats_mut['mean_r0']
-    sem_r0_mut = fitness_stats_mut['sem_r0']
-    mean_r_mut = fitness_stats_mut['mean_r']
-    sem_r_mut = fitness_stats_mut['sem_r']
+    r0_mut_mean = fitness_stats_mut['r0_mean']
+    r0_mut_sem = fitness_stats_mut['r0_sem']
+    r_mut_mean = fitness_stats_mut['r_mean']
+    r_mut_sem = fitness_stats_mut['r_sem']
 
     y1_pos = np.array([0, 3, 6, 9])
     y2_pos = np.array([1, 4, 7, 10])
@@ -151,9 +151,9 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
 
     ax1.bar(
         y1_pos,
-        mean_r0_wt,
+        r0_wt_mean,
         width=1.0,
-        yerr=sem_r0_wt,
+        yerr=r0_wt_sem,
         align='center',
         alpha=0.4,
         ecolor='black',
@@ -162,9 +162,9 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
     )
     ax1.bar(
         y2_pos,
-        mean_r0_mut,
+        r0_mut_mean,
         width=1.0,
-        yerr=sem_r0_mut,
+        yerr=r0_mut_sem,
         align='center',
         alpha=0.8,
         ecolor='black',
@@ -177,15 +177,15 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
 
     ax1.set_ylabel('R0', fontsize=14)
 
-    ax1.set_ylim(0.92 * mean_r0_wt[0], 1.005 * mean_r0_wt[0])
+    ax1.set_ylim(0.92 * r0_wt_mean[0], 1.005 * r0_wt_mean[0])
 
     ax2 = ax1.twinx()
 
     ax2.bar(
         y4_pos,
-        mean_r_wt,
+        r_wt_mean,
         width=1.0,
-        yerr=sem_r_wt,
+        yerr=r_wt_sem,
         align='center',
         alpha=0.4,
         ecolor='black',
@@ -194,9 +194,9 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
     )
     ax2.bar(
         y5_pos,
-        mean_r_mut,
+        r_mut_mean,
         width=1.0,
-        yerr=sem_r_mut,
+        yerr=r_mut_sem,
         align='center',
         alpha=0.8,
         ecolor='black',
@@ -206,7 +206,7 @@ def plot_fig_3(fitness_stats_wt, fitness_stats_mut):
     ax2.bar(y6_pos, dummy_r, width=0.3, color='w')
 
     ax2.set_ylabel('r', fontsize=14)
-    ax2.set_ylim(0.95 * mean_r_wt[0], 1.0045 * mean_r_wt[0])
+    ax2.set_ylim(0.95 * r_wt_mean[0], 1.0045 * r_wt_mean[0])
 
     ax2.set_xticks(y7_pos)
 
@@ -282,15 +282,15 @@ def plot_fig_4(
 
 
 def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
-    mean_r0_wt = fitness_stats_wt['mean_r0']
-    sem_r0_wt = fitness_stats_wt['sem_r0']
-    mean_r_wt = fitness_stats_wt['mean_r']
-    sem_r_wt = fitness_stats_wt['sem_r']
+    r0_wt_mean = fitness_stats_wt['r0_mean']
+    r0_wt_sem = fitness_stats_wt['r0_sem']
+    r_wt_mean = fitness_stats_wt['r_mean']
+    r_wt_sem = fitness_stats_wt['r_sem']
 
-    mean_r0_mut = fitness_stats_mut['mean_r0']
-    sem_r0_mut = fitness_stats_mut['sem_r0']
-    mean_r_mut = fitness_stats_mut['mean_r']
-    sem_r_mut = fitness_stats_mut['sem_r']
+    r0_mut_mean = fitness_stats_mut['r0_mean']
+    r0_mut_sem = fitness_stats_mut['r0_sem']
+    r_mut_mean = fitness_stats_mut['r_mean']
+    r_mut_sem = fitness_stats_mut['r_sem']
 
     y1_pos = [0]
     y2_pos = [1, 2, 3, 4]
@@ -303,8 +303,8 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
 
     ax1.bar(
         y1_pos,
-        mean_r0_wt[0],
-        yerr=sem_r0_wt[0],
+        r0_wt_mean[0],
+        yerr=r0_wt_sem[0],
         align='center',
         alpha=0.4,
         ecolor='black',
@@ -313,8 +313,8 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     )
     ax1.bar(
         y2_pos,
-        mean_r0_mut,
-        yerr=sem_r0_mut,
+        r0_mut_mean,
+        yerr=r0_mut_sem,
         align='center',
         alpha=0.8,
         ecolor='black',
@@ -323,14 +323,14 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     )
 
     ax1.set_ylabel('R0', fontsize=14, **afont)
-    ax1.set_ylim(0.96 * mean_r0_wt[0], 1.035 * mean_r0_wt[0])
+    ax1.set_ylim(0.96 * r0_wt_mean[0], 1.035 * r0_wt_mean[0])
 
     ax2 = ax1.twinx()
 
     ax2.bar(
         y3_pos,
-        mean_r_wt[0],
-        yerr=sem_r_wt[0],
+        r_wt_mean[0],
+        yerr=r_wt_sem[0],
         align='center',
         alpha=0.4,
         ecolor='black',
@@ -339,8 +339,8 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     )
     ax2.bar(
         y4_pos,
-        mean_r_mut,
-        yerr=sem_r_mut,
+        r_mut_mean,
+        yerr=r_mut_sem,
         align='center',
         alpha=0.8,
         ecolor='black',
@@ -349,7 +349,7 @@ def plot_fig_5(fitness_stats_wt, fitness_stats_mut):
     )
 
     ax2.set_ylabel('r', fontsize=16, **afont)
-    ax2.set_ylim(0.98 * mean_r_wt[0], 1.019 * mean_r_wt[0])
+    ax2.set_ylim(0.98 * r_wt_mean[0], 1.019 * r_wt_mean[0])
 
     ax2.set_xticks(y5_pos)
     xticks = ['wt($\epsilon$) vs mut($\epsilon$)']
