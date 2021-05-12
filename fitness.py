@@ -123,12 +123,12 @@ def get_fitness_data(
     repetition_count = population_simulation.shape[1]
     t_m = population_simulation.shape[2]
 
-    t_arr = np.arange(0, t_m)
+    t_steps = np.arange(0, t_m)
 
-    mean_r0_arr = []
-    sem_r0_arr = []
-    mean_r_arr = []
-    sem_r_arr = []
+    r0_mean_arr = []
+    r0_sem_arr = []
+    r_mean_arr = []
+    r_sem_arr = []
 
     value_count = len(population_simulation)
     for value_index in range(value_count):
@@ -141,19 +141,19 @@ def get_fitness_data(
         for row in range(repetition_count):
             f = fecundity[row, :]
             # r: intrinsic rate of natural increase
-            r = brentq(euler_lotka, a, b, args=(f, t_arr))
+            r = brentq(euler_lotka, a, b, args=(f, t_steps))
             r_arr.append(r)
 
-        mean_r0, sem_r0 = get_mean_and_sem(r0)
-        mean_r, sem_r = get_mean_and_sem(np.array(r_arr))
+        r0_mean, r0_sem = get_mean_and_sem(r0)
+        r_mean, r_sem = get_mean_and_sem(np.array(r_arr))
 
-        mean_r0_arr.append(mean_r0)
-        sem_r0_arr.append(sem_r0)
-        mean_r_arr.append(mean_r)
-        sem_r_arr.append(sem_r)
+        r0_mean_arr.append(r0_mean)
+        r0_sem_arr.append(r0_sem)
+        r_mean_arr.append(r_mean)
+        r_sem_arr.append(r_sem)
 
     return dict(
-        mean_r0=mean_r0_arr, sem_r0=sem_r0_arr, mean_r=mean_r_arr, sem_r=sem_r_arr
+        r0_mean=r0_mean_arr, r0_sem=r0_sem_arr, r_mean=r_mean_arr, r_sem=r_sem_arr
     )
 
 
@@ -196,9 +196,9 @@ def homarus_fertility(
     np.ndarray
         A 1D array with shape (t_m,) representing average number of female offspring produced at time t
     """
-    t_arr = np.arange(0, t_m)
-    fertility = sigma * (1 + gamma * t_arr / t_m)
-    for t in t_arr:
+    t_steps = np.arange(0, t_m)
+    fertility = sigma * (1 + gamma * t_steps / t_m)
+    for t in t_steps:
         # First reproductive event starts at t = frequency - 1 (i.e. not t = 0)
         if t % frequency != frequency - 1:
             fertility[t] = 0.0
@@ -207,7 +207,7 @@ def homarus_fertility(
         return fertility
 
     if population == MUTANT_WILD:
-        for t in t_arr:
+        for t in t_steps:
             fertility[t] = fertility[t] * (
                 1 - mu * alpha * ((1 + kappa) ** (t + 1) - 1)
             )

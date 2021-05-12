@@ -28,7 +28,7 @@ To inspect and run the case studies, open the notebooks in JupyterLab.
 jupyter lab
 ```
 
-The case studies are pre-run for immediate inspection, and may be further experimented with for a closer look. The `%%time` cell magic outputs show the approximate times one can expect for reruns of the most time-consuming simulations.
+The case studies are pre-run for immediate inspection, and may be further experimented with for a closer look. The `%%time` cell magic outputs show the approximate times one can expect for reruns of the most time-consuming simulations. The cells in each notebook are intended to be run in order. 
 
 The logic of the cohort model and fitness calculations can be found in the modules `cohort_model` and `fitness`, respectively. 
 
