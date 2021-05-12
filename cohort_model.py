@@ -1,3 +1,5 @@
+"""This module does blah blah.""" # TODO
+
 from collections import defaultdict
 from typing import Tuple
 
@@ -138,8 +140,6 @@ def cohort_survivorship_model(
         shape (t_m, number of individuals), where each column represents one
         individual and each row a single time step for the entire cohort
     """
-    # TODO: Refactor sånn at t_m er inne i hazard_rate_params?
-
     # On first run, reshape 1D input array to 2D
     if len(cohort.shape) == 1:
         cohort_survivorship_raw = cohort.reshape(1, -1)
@@ -169,7 +169,7 @@ def run_cohort_simulation(
     hazard_rate_parameters: dict,
     t_m: int,
 ) -> np.ndarray:
-    """[summary]
+    """Run cohort model repeatedly and return aggregated results.
 
     The term "population" is chosen to represent a set of cohorts
     subject to the same hereditary and environmental conditions.
