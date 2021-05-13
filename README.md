@@ -1,5 +1,7 @@
 # Aging and risk of dying
 
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4756831.svg)](https://zenodo.org/record/4756831#.YJ0U5WYzZTY) [![GitHub release (latest by date)](https://img.shields.io/github/v/release/stifwo/advantageous-aging)](https://github.com/stifwo/advantageous-aging/releases/latest) [![MIT License](https://img.shields.io/github/license/stifwo/advantageous-aging)](https://github.com/stifwo/advantageous-aging/blob/main/LICENSE)
+
 The code in this repository produces the results in S. W. Omholt, T. B. L. Kirkwood, **Aging as a consequence of selection to reduce the environmental risk of dying**, *Proc. Natl. Acad. Sci. U.S.A.*, 2021.
 
 The paper presents three case studies that are used to validate the evolutionary relevance of the main hypothesis underlying the paper. Case study 1 focuses on the bowl and doily spider (*Frontinella pyramitela*) (Figures 1, 2 and 3). Case study 2 focuses on the dipterian *Telostylinus angusticollis* (Figure 4). Case study 3 (Figure 5) is somewhat more loosely linked to experimental data, but is closely guided by life-history data of the European lobster (*Homarus gammarus*). 
@@ -35,7 +37,7 @@ The logic of the cohort model and fitness calculations can be found in the modul
 ### Other sets of survivorship data
 If you possess survivorship data for an organism in the wild as well as in a protected environment, you should be able to use the code to test how well our life-history model can accommodate for your data. 
 
-1. Add a new directory containing your data in the ´data´ directory.
+1. Add a new directory containing your data in the `data` directory.
 1. Create a new notebook for parameter estimation (curve fitting)
 1. Adapt the curve fitting procedure from the parameter estimation notebooks for *Frontinella* and *Telostylinus*
 1. Run through the parameter space in multiple passes, with progressively smaller intervals and smaller steps
