@@ -1,12 +1,10 @@
-# Advantageous Aging
+# Aging and risk of dying
 
-The code in this repository produces the results in S. W. Omholt, T. B. L. Kirkwood, **Aging as a consequence of selection to reduce the environmental risk of dying**, *Proc. Natl. Acad. Sci. U.S.A.* **?**, ??-??, 2021.
+The code in this repository produces the results in S. W. Omholt, T. B. L. Kirkwood, **Aging as a consequence of selection to reduce the environmental risk of dying**, *Proc. Natl. Acad. Sci. U.S.A.*, 2021.
 
 The paper presents three case studies that are used to validate the evolutionary relevance of the main hypothesis underlying the paper. Case study 1 focuses on the bowl and doily spider (*Frontinella pyramitela*) (Figures 1, 2 and 3). Case study 2 focuses on the dipterian *Telostylinus angusticollis* (Figure 4). Case study 3 (Figure 5) is somewhat more loosely linked to experimental data, but is closely guided by life-history data of the European lobster (*Homarus gammarus*). 
 
-The main intention with this repository is to allow others to check that the code faithfully reflects and reproduces what is written and presented in the paper. The case studies in this repository are complete only when read together with their corresponding text in the paper.
-
-It is our hope that the underlying code can be used in teaching as well as in research. Concerning the latter, if you possess survivorship data for an organism in the wild as well as in a protected environment, it should be straight-forward to use the code to test how well our life-history model can accommodate for your data.
+The main intention with this repository is to allow others to check that the code faithfully reflects and reproduces what is written and presented in the paper. However, it is our hope that the underlying code can be used in teaching as well as in research.
 
 The original code has most kindly been fully refactored by [Oda Omholt](https://github.com/odaom) in order to ease readability and reuse.
 
@@ -17,6 +15,7 @@ Each animal in the Darwinian theatre is exposed to a number of abiotic and bioti
 ## Installation
 Clone the repository to your machine. With Python version >=3.8, install the required packages.
 
+In a terminal window, enter:
 ```bash
 pip install -r requirements.txt
 ```
@@ -24,6 +23,7 @@ pip install -r requirements.txt
 ## Usage
 To inspect and run the case studies, open the notebooks in JupyterLab.
 
+In a terminal window, enter:
 ```bash
 jupyter lab
 ```
