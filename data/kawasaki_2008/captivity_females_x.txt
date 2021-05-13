@@ -1,4 +1,4 @@
-# x axis data points extracted from Figure ? in 
+# x axis data points extracted from Figure 5 in 
 # N. Kawasaki, C. E. Brassil, R. C. Brooks, R. Bonduriansky, 
 # Environmental effects on the expression of life span and aging: 
 # An extreme contrast between wild and captive cohorts of 
