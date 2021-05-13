@@ -4,12 +4,13 @@ This module provides functions for running the cohort survivorship model. The
 cohort survivorship model is explained in detail in Omholt and Kirkwood (2021).
 
 The primary function to run the cohort model is run_cohort_simulation, which 
-runs the cohort model repeteadly and returns the survivorship data:
+runs the cohort model repeteadly and returns the survivorship data. 
+Example usage:
 
     repetition_count = 1000
     individual_count = 1000
     t_m = 100
-    hazard_rate_params = dict(population=MUT_CAPTIVITY, alpha=0.002, kappa=0.008)
+    hazard_rate_params = dict(population=MUT_CAPTIVITY, alpha=0.002, kappa=0.003)
     survivorship = run_cohort_simulation(repetition_count, individual_count, hazard_rate_params, t_m)
 """ 
 
@@ -28,7 +29,7 @@ def _get_hazard_rate(
     population: str,
     t: int,
     epsilon: float = None,
-    hazard_rate_hypwt: float = None,
+    hazard_rate_wt: float = None,
     alpha: float = None,
     kappa: float = None,
     beta: float = 0,
@@ -49,7 +50,7 @@ def _get_hazard_rate(
         The current time step
     epsilon : float, optional
         The epsilon value, by default None
-    hazard_rate_hypwt : float, optional
+    hazard_rate_wt : float, optional
         The hazard rate of the wild type, by default None
     alpha : float, optional
         The alpha value, by default None
@@ -79,7 +80,7 @@ def _get_hazard_rate(
         if t_m == np.inf and beta:
             raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_params.")
         return (
-            (1 - epsilon) * hazard_rate_hypwt * (1 - beta * t / t_m)
+            (1 - epsilon) * hazard_rate_wt * (1 - beta * t / t_m)
             + alpha * (((1 + kappa) ** (t + 1)) - 1)
             + (omega * t ** tau)
         )
@@ -88,7 +89,7 @@ def _get_hazard_rate(
     if population == HYP_WILDTYPE:
         if t_m == np.inf and beta:
             raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_params.")
-        return hazard_rate_hypwt * (1 - beta * t / t_m) + (omega * t ** tau)
+        return hazard_rate_wt * (1 - beta * t / t_m) + (omega * t ** tau)
 
     raise ValueError(
         "Population argument must be set to either 'mutant wild', 'mutant captivity' or 'hypothetical wild type'."
@@ -261,12 +262,12 @@ def population_survivorship_difference(
     """Compare survivorship data of two populations.
 
     Calculates the difference in number of survivors between two populations
-    across the given time span, for each (epsilon, hazard_rate_hypwt) pair
+    across the given time span, for each (epsilon, hazard_rate_wt) pair
 
     Returns the survivorship data for each population (for each
-    (epsilon, hazard_rate_hypwt) pair), and the calculated mean of the difference
+    (epsilon, hazard_rate_wt) pair), and the calculated mean of the difference
     and standard deviation of the difference between them (for each (epsilon,
-    hazard_rate_hypwt) pair).
+    hazard_rate_wt) pair).
 
     Parameters
     ----------
@@ -291,11 +292,11 @@ def population_survivorship_difference(
     -------
     Tuple[dict, np.ndarray, np.ndarray]
         1: Dictionary with population survivorship data for each population
-        (for each (epsilon, hazard_rate_hypwt) pair), with population names as keys
+        (for each (epsilon, hazard_rate_wt) pair), with population names as keys
         2: A 1D array with the mean of the difference between the populations
-        (for each (epsilon, hazard_rate_hypwt) pair)
+        (for each (epsilon, hazard_rate_wt) pair)
         3: A 1D array with the standard deviation of the difference between the
-        populations (for each (epsilon, hazard_rate_hypwt) pair)
+        populations (for each (epsilon, hazard_rate_wt) pair)
     """
     population_simulations = defaultdict(list)
 
@@ -304,9 +305,9 @@ def population_survivorship_difference(
         # Reset seed to produce the same pseudo-random number sequence for each
         # population to ensure accurate comparison
         np.random.seed(1729)
-        for epsilon, hazard_rate_hypwt in zip(epsilons, hazard_rates_wt):
+        for epsilon, hazard_rate_wt in zip(epsilons, hazard_rates_wt):
             hazard_rate_params['epsilon'] = epsilon
-            hazard_rate_params['hazard_rate_hypwt'] = hazard_rate_hypwt
+            hazard_rate_params['hazard_rate_wt'] = hazard_rate_wt
             population_survivorship = run_cohort_simulation(
                 repetition_count, individual_count, hazard_rate_params, t_m
             )

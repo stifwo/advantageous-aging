@@ -82,7 +82,7 @@ def euler_lotka(r: float, f: np.ndarray, t: np.ndarray) -> np.ndarray:
 def get_mean_and_sem(arr: np.ndarray) -> Tuple[float, float]:
     """Return mean and standard error of an array.
 
-    The mean and sem are not normalized.
+    The mean and SEM are not normalized.
 
     Parameters
     ----------
@@ -173,8 +173,7 @@ def homarus_fertility(
     alpha: float = None,
     kappa: float = None,
 ) -> np.ndarray:
-    # TODO: Is the summary correct with respect to female offspring?
-    """Get the average number of female offspring at age t based on model of Homarus gammarus fertility.
+    """Get the average number of female offspring at age t, based on model of Homarus gammarus fertility.
 
     Explanations for parameters are given in Omholt and Kirkwood (2021).
 
