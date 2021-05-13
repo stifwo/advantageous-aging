@@ -15,7 +15,7 @@ from scipy.optimize import brentq
 from cohort_model import HYP_WILDTYPE, MUT_WILD
 
 
-def get_fecundity(
+def _get_fecundity(
     population_survivorship: np.ndarray, fertility: 'list[Tuple[int, float]]'
 ) -> np.ndarray:
     """Calculate m(t) * l(t).
@@ -57,7 +57,7 @@ def get_fecundity(
     return fecundity
 
 
-def euler_lotka(r: float, f: np.ndarray, t: np.ndarray) -> np.ndarray:
+def _euler_lotka(r: float, f: np.ndarray, t: np.ndarray) -> np.ndarray:
     """The Euler–Lotka equation.
 
     See Eq. 7 in Omholt and Kirkwood (2021).
@@ -138,7 +138,7 @@ def get_fitness_data(
 
     value_count = len(population_simulation)
     for value_index in range(value_count):
-        fecundity = get_fecundity(population_simulation[value_index], fertility)
+        fecundity = _get_fecundity(population_simulation[value_index], fertility)
         r0 = np.sum(fecundity, axis=1)  # R0: net reproductive rate
 
         a, b = -2, 8  # Bracketing interval for Brent's method (may need adjustments)
@@ -147,7 +147,7 @@ def get_fitness_data(
         for row in range(repetition_count):
             f = fecundity[row, :]
             # r: intrinsic rate of natural increase
-            r = brentq(euler_lotka, a, b, args=(f, t_steps))
+            r = brentq(_euler_lotka, a, b, args=(f, t_steps))
             r_arr.append(r)
 
         r0_mean, r0_sem = get_mean_and_sem(r0)
