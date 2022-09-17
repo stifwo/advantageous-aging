@@ -18,6 +18,7 @@ from collections import defaultdict
 from typing import Tuple
 
 import numpy as np
+from numpy.polynomial import Polynomial
 
 
 MUT_CAPTIVITY = 'mutant captivity'
@@ -36,6 +37,7 @@ def _get_hazard_rate(
     t_m: int = np.inf,
     omega: float = 0,
     tau: float = 0,
+    expression: callable = None,
 ) -> float:
     """Calculate the hazard rate for the specified population using the provided parameters.
 
@@ -64,6 +66,8 @@ def _get_hazard_rate(
         The omega value, by default 0
     tau : float, optional
         The tau value, by default 0
+    expression : callable, optional
+        If using a different expression for the hazard rate, by default None
 
     Returns
     -------
@@ -75,7 +79,12 @@ def _get_hazard_rate(
     ValueError
         When population parameter is not one of the three valid options
     """
+    
+    # If using a different expression for the hazard rate, e.g. an analytical function
+    if expression:
+        return expression(t)
 
+    
     if population == MUT_WILD:
         if t_m == np.inf and beta:
             raise ValueError("When using a beta value, t_m must also be defined in hazard_rate_params.")
